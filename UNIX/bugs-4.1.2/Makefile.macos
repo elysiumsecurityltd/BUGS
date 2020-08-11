@@ -1,0 +1,254 @@
+#
+# MACOS BUGS Makefile V2.1
+# 17/01/2020
+#
+VERSION = `cat .VERSION`
+DATE = `cat .DATE`
+MEUSER = `whoami`
+
+# Change these values 
+INSTALL_PATH = "/usr/local/bugs-$(VERSION)"
+
+# YOU MUST CHOOSE YOUR COMPILER
+# default = cc
+
+# Linux, hpux, etc
+#export CC=gcc
+
+# Sunos, Silicon Graphics, etc
+#export CC=cc
+
+# If you want to compile with all the warning ON 
+# That do not work with cc
+#export BFLAG=-Wall
+
+trap: version 
+	@echo MACOS - Based on BSD Makefile 
+	@echo
+	@echo ---------------------------------------
+	@echo Please read README before running make.
+	@echo ---------------------------------------
+	@echo
+	@echo make options are :
+	@echo
+	@echo all       : compile everything library and apps
+	@echo test      : Try to uncrypt the test file, do make all before
+	@echo lib       : compile only the BUGS crypt library
+	@echo apps      : compile only application programs
+	@echo shell	: if you use blogin as your shell
+	@echo install   : install apps and library in a path
+	@echo uninstall : uninstall apps and library
+	@echo "clean     : erase *.o *.h and executable files"
+	@echo
+	@echo -----------------------------------------------------
+	@echo IMPORTANT: If you use blogin as your logon shell, YOU
+	@echo MUST do a \'make shell\'. This is because you can\'t 
+	@echo compile a file while you are using it...
+	@echo -----------------------------------------------------
+
+all: lib apps
+
+apps : appschoice 
+	@cd apps/; make
+	@echo "Copying binary file in ./bin ..."
+	@mv apps/bcrypt ./bin
+	@mv apps/bchat ./bin
+	@mv apps/bpass ./bin
+	@mv apps/blogin ./bin
+	@mv apps/bkey ./bin
+	@mv apps/bhide ./bin
+	@mv apps/bpassdel ./bin
+	@mv apps/bmore ./bin
+	@mv apps/block ./bin
+	@mv apps/bunlock ./bin
+
+test : testchoice
+	@./testbcrypt.sh
+
+testfpost : testfpostchoice
+	@./testfpos_t.sh
+
+shell : shellchoice
+	@cd apps/; make shell
+	@mv apps/shell ./bin/blogin
+
+lib:	testfpost libchoice
+	@cd lib/unix; make 
+
+install: instchoice all
+	@if [ -d $(INSTALL_PATH) ]; then \
+		echo "$(INSTALL_PATH) already exists. Use make uninstall first."; \
+		exit 1; \
+	fi
+	@echo "Using sudo for Creating directory $(INSTALL_PATH) as root..."
+	@echo "You will now be prompted for the password of user `whoami`, who must be able to use sudo."
+	@sudo mkdir $(INSTALL_PATH) 
+	@sudo chown $(MEUSER): $(INSTALL_PATH)
+	@echo "Copying binaries in $(INSTALL_PATH) ..."
+	@cp -f ./bin/* $(INSTALL_PATH)/
+	@echo "Copying bugscrypt.a in $(INSTALL_PATH) ..."
+	@cp -f ./lib/unix/bugscrypt.a $(INSTALL_PATH)/
+	@echo "Copying docs in $(INSTALL_PATH) ..."
+	@cp -rf ./doc/* $(INSTALL_PATH)/
+	@echo
+	@echo ------------------------------------------------------------
+	@echo
+	@echo "YOU MUST NOW ADD $(INSTALL_PATH) to your PATH : "
+	@echo -n 'export PATH=$$PATH:'
+	@echo "$(INSTALL_PATH)"
+	@echo "You may want to do that in your .bash_profile to make this permanent"
+	@echo
+	@echo "Congratualations! The applications and library have been"
+	@echo "successfully installed"
+	@echo
+	@echo Please note that you are using these applications and
+	@echo library at your own risk. Therefore I discharge any
+	@echo responsibility if you loose any data or illigaly use this.
+	@echo package.
+	@echo
+	@echo "Now, I hope you will enjoy those applications as much as"
+	@echo "I have enjoyed programming them."
+	@echo "Sylvain Martinez."
+	@echo
+
+uninstall: uninstchoice
+	@if [ -d $(INSTALL_PATH) ]; then \
+		echo "Removing directory $(INSTALL_PATH) using sudo..."; \
+		sudo rm -r $(INSTALL_PATH); \
+		echo ""; \
+		echo "--------------------------------------------------"; \
+		echo ""; \
+		echo "BUGS V$(VERSION) HAS BEEN SUCCESSFULLY UNINSTALLED."; \
+		echo ""; \
+		echo "You should also remove $(INSTALL_PATH) from your PATH (i.e.: in your .bash_profile)"; \
+	else \
+		echo "The directory $(INSTALL_PATH) was not found, no need to uninstall anything"; \
+	fi
+
+clean: cleanchoice
+	@cd lib/unix; make clean; rm Makefile
+	@cd apps/; make clean; rm Makefile
+	@cp Makefile.orig Makefile
+
+	@if [ -f  ./bin/bcrypt ];  then \
+	rm -f ./bin/bcrypt; \
+        fi
+
+	@if [ -f ./bin/bchat ]; then \
+	rm -f ./bin/bchat; \
+	fi
+
+	@if [ -f ./bin/bpass ]; then \
+	rm -f ./bin/bpass; \
+        fi
+
+	@if [ -f ./bin/blogin ]; then \
+	rm -f ./bin/blogin; \
+        fi
+
+	@if [ -f ./bin/bkey ]; then \
+	rm -f ./bin/bkey; \
+	fi
+
+	@if [ -f ./bin/bhide ]; then \
+	rm -f ./bin/bhide; \
+	fi
+
+	@if [ -f ./bin/bpassdel ]; then \
+	rm -f ./bin/bpassdel; \
+	fi
+
+	@if [ -f ./bin/bmore ]; then \
+	rm -f ./bin/bmore; \
+	fi
+
+	@if [ -f ./bin/block ]; then \
+	rm -f ./bin/block; \
+	fi
+
+	@if [ -f ./bin/bunlock ]; then \
+	rm -f ./bin/bunlock; \
+	fi
+
+appschoice:
+	@echo apps flag detected. 
+	@echo
+	@echo "-------------------"
+	@echo "MAKING APPLICATIONS" 
+	@echo "-------------------"
+	@echo
+
+testchoice:
+	@echo test flag detected.
+	@echo
+	@echo "-------------------------"
+	@echo "TESTING BCRYPT ENCRYPTION"
+	@echo "-------------------------"
+	@echo
+	@echo "This is going to test if you can decrypt a standard BUGS file"
+	@echo
+
+
+
+testfpostchoice:
+	@echo test fpos_t flag detected
+	@echo
+	@echo "-------------------"
+	@echo "TESTING FPOS_T TYPE"
+	@echo "-------------------"
+	@echo
+
+shellchoice:
+	@echo shell flag detected.
+	@echo
+	@echo "------------"
+	@echo "MAKING SHELL"
+	@echo "------------"
+	@echo
+
+libchoice:
+	@echo lib flag detected.
+	@echo
+	@echo "--------------"
+	@echo "MAKING LIBRARY"
+	@echo "--------------"
+	@echo
+
+instchoice:
+	@echo install flag detected.
+	@echo
+	@echo "----------------------"
+	@echo "INSTALLATION INITIATED"
+	@echo "----------------------"
+	@echo
+	@echo "you MUST be able to use sudo as root to execute this command"
+	@echo
+	@echo REMEMBER TO CHANGE THE VALUE OF THE INSTALL PATH in the makefile
+	@echo if you want to install this package in a specific place.
+	@echo
+
+uninstchoice:
+	@echo uninstall flag detected.
+	@echo 
+	@echo "------------------------"
+	@echo "UNINSTALLATION INITIATED"
+	@echo "------------------------"
+	@echo
+	@echo "you MUST be able to use sudo as root to execute this command"
+	@echo
+
+cleanchoice:
+	@echo clean flag detected.
+	@echo
+	@echo "------------------"
+	@echo "CLEANING INITIATED"
+	@echo "------------------"
+	@echo
+	
+
+version:
+	@echo
+	@echo "BUGS V$(VERSION), $(DATE),(c) MARTINEZ Sylvain" 
+
+ending:
+

@@ -1,0 +1,151 @@
+#YOU MUST CHOOSE YOUR COMPILER
+#CC=gcc
+#BFLAG=-Wall -O3
+
+all: warning extra.o bcrypt bchat bpass blogin bkey bhide bpassdel bmore block\
+ bunlock
+
+extra.o: extra.c
+	$(CC) $(BFLAG) -c extra.c
+
+bcrypt: bcrypt.c 
+	$(CC) $(BFLAG) -o bcrypt bcrypt.c extra.o ../lib/unix/bugscrypt.a -lc
+
+bchat: bchat.c
+	$(CC) $(BFLAG) -o bchat bchat.c extra.o ../lib/unix/bugscrypt.a -lc
+
+bpass: bpass.c
+	$(CC) $(BFLAG) -o bpass bpass.c extra.o ../lib/unix/bugscrypt.a -lc
+
+blogin: blogin.c 
+	$(CC) $(BFLAG) -o blogin blogin.c extra.o ../lib/unix/bugscrypt.a -lc
+
+bkey: bkey.c
+	$(CC) $(BFLAG) -o bkey bkey.c extra.o ../lib/unix/bugscrypt.a -lc
+
+bhide: bhide.c
+	$(CC) $(BFLAG) -o bhide bhide.c ../lib/unix/bugscrypt.a -lc
+
+bpassdel: bpassdel.c
+	$(CC) $(BFLAG) -o bpassdel bpassdel.c extra.o ../lib/unix/bugscrypt.a -lc
+
+bmore: bmore.c
+	$(CC) $(BFLAG) -o bmore bmore.c extra.o ../lib/unix/bugscrypt.a -lc
+
+block: block.c
+	$(CC) $(BFLAG) -o block block.c extra.o ../lib/unix/bugscrypt.a -lc
+
+bunlock: bunlock.c
+	$(CC) $(BFLAG) -o bunlock bunlock.c extra.o ../lib/unix/bugscrypt.a -lc
+
+shell: warning blogin.c
+	$(CC) $(BFLAG) -o shell blogin.c extra.o ../lib/unix/bugscrypt.a -lc
+
+
+testfpost: testfpos_t
+	$(CC) $(BFLAG) -o testfpos_t testfpos_t.c
+
+
+clean:
+	@if [ -f bcrypt.o ]; then \
+	rm -f bcrypt.o; \
+        fi
+
+	@if [ -f bchat.o ]; then \
+	rm -f bchat.o; \
+	fi
+	
+	@if [ -f bpass.o ]; then \
+	rm -f bpass.o; \
+	fi
+
+	@if [ -f blogin.o ]; then \
+	rm -f blogin.o; \
+	fi
+	
+	@if [ -f bkey.o ]; then \
+	rm -f bkey.o; \
+	fi
+
+	@if [ -f bhide.o ]; then \
+	rm -f bhide.o; \
+	fi
+
+	@if [ -f bmore.o ]; then \
+	rm -f bmore.o; \
+	fi
+
+	@if [ -f block.o ]; then \
+	rm -f block.o; \
+	fi 
+
+	@if [ -f bunlock.o ]; then \
+	rm -f bunlock.o; \
+	fi 
+
+	@if [ -f bpassdel.o ]; then \
+	rm -f bpassdel.o; \
+	fi
+
+	@if [ -f extra.o ]; then \
+	rm -f extra.o; \
+	fi
+
+	@if [ -f bcrypt ]; then \
+	rm -f bcrypt; \
+        fi
+
+	@if [ -f bchat ]; then \
+	rm -f bchat; \
+	fi
+
+	@if [ -f bpass ]; then \
+	rm -f bpass; \
+        fi
+
+	@if [ -f blogin ]; then \
+	rm -f blogin; \
+        fi
+	
+	@if [ -f bkey ]; then \
+	rm -f bkey; \
+	fi
+
+	@if [ -f bhide ]; then \
+	rm -f bhide; \
+	fi
+
+	@if [ -f bpassdel ]; then \
+	rm -f bpassdel; \
+	fi
+
+	@if [ -f bmore ]; then \
+	rm -f bmore; \
+	fi
+
+	@if [ -f block ]; then \
+	rm -f block; \
+	fi 
+
+	@if [ -f bunlock ]; then \
+	rm -f bunlock; \
+	fi 
+
+	@if [ -f shell ]; then \
+	rm -f shell; \
+        fi
+
+
+	@if [ -f testfpos_t ]; then \
+	rm -f testfpos_t;\
+	fi
+
+
+warning:
+	@echo -----------------------------------------------
+	@echo WARNING :
+	@echo You need bugscrypt.a to compile the applications 
+	@echo You must have done before :  make lib
+	@echo -----------------------------------------------
+	@echo Creating applications ...
+

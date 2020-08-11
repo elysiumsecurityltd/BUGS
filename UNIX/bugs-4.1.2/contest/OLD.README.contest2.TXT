@@ -1,0 +1,68 @@
+—— February 2015 —
+http://www.elysiumsecurity.com
+This contest is now closed
+—
+
+19/09/2000
+London
+
+THIS IS A NEW CONTEST !
+This contest cancelled the previous one from the 01 August 2000.
+The reason why I am changing the rules is because after many discussions on the newsgroup
+sci.crypt it seems it would have been too difficult to win the previous contest with the information
+I was giving away. It was not completely a "real world" contest.
+
+For these reasons I have decided to make this contest easier to win and therefore more
+of a "real world" test.
+
+
+---------------------
+BUGS CONTEST Number 2
+---------------------
+
+Prize               : 50 English pounds
+Start of the contest: 19 September 2000
+End of the contest  : 19 September 2001
+
+To test the strenght of this algorithm, I've decided to run a contest.
+Because this is a free software and I created it during my free time,
+I can't offer a lot of money. However I hope that this will push more
+people to try to crack my algorithm.
+This new BUGS contest cancelled the previous BUGS contest from the 01 August 2000
+The 2 ciphers texts are the same than for the previous contest.
+
+-----
+RULES
+-----
+
+Information given:
+
+- 2 cipher texts which have been crypted with the same KEY
+- the 2 original clear texts
+- The size of the key used: 256 bits
+- Each clear text have been crypted using different parameters values (block shuffle/block crypt)
+
+In order to win and claim your prize, you need to:
+(me = Sylvain Martinez)
+
+- Find the key and the parameters used to crypt the 2 clear texts.
+
+- Send me a report explaining how you did it 
+
+- Send me the source of your application which found the key and parameters
+
+- Your key has to be the same than the one I used to crypt the files 
+
+- You need to send me your answer before the 19 September 2001
+
+- In the event that many people send me a solution to find the key, then the  
+  quickest and most generic application will win.
+
+- Pleople who sent me a solution will have their name listed on the web site
+  and their application available only if they want it to be (as it might give hints for other competitors)
+
+- The winner will be annonced after the 19th of september 2001 (within a week)
+ 
+- If nobody can crack my algorithm and find the key/parameters, the solution
+  will be posted on the Web Site: http://www.bcrypt.com after the 
+  19th September 2001

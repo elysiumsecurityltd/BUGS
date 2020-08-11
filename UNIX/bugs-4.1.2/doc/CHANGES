@@ -1,0 +1,127 @@
+06/02/2001
+London, UK
+Sylvain Martinez
+
+BUGS v4.0.1
+
+-------------------
+CHANGES FROM V3.5.3
+-------------------
+
+Please read this if you have already been using the BUGS library in
+one of you application.
+
+Note: varinit is:
+      globalvar *varinit;
+
+      varinit = (globalvar *) malloc(sizeof(globalvar));
+
+1) The library has been renamed, only on Unix, to bugscrypt.a
+
+2) globalvar->STOP does not exist anymore and has been replaced by
+   globalvar->MISC
+   This is a multi purpose variable.
+ 
+   If you want to stop the library you can't use the 666 value anymore
+   instead you need to do:
+   globalvar->MISC = 1;
+
+3) There are 3  new variables in the globalvar structure:
+   a) varinit->KEY_BUFFER
+
+   This variable is used in seed() to have a poll of key to choose 
+   from before doing a XOR to the file and therefore create a 
+   key dependancy.
+  
+   If you are using a custom block crypt, small, then the time to
+   crypt/decrypt the file will be much longer than vefore, because the
+   default KEY_BUFFER is 16. This means that each time you are crypting
+   on of the block_crypt, it will first generates 16 keys.
+   When using the KEY_BUFFER you should use a big block_crypt
+   or block_crypt = 0 which will tell the algorithm to use the
+   file as only ONE big block.
+
+   This varinit->KEY_BUFFER is initialised in binit() to 16
+   if you want to change its value (for example 0 or 32)
+   you have to do it after calling binit();
+
+   b) varinit->NB_BITS
+    
+   This variable gives you the number of bits used by the TYPE_INT variable.
+   This is to optimised the code.
+
+   c) varinit->NB_SHIFT
+ 
+   This variable is only used in bcrypt_swap() to shift bits, the same as using a division
+   Because bcrypt_swap can be called often, it's quicker to do not have to calculate the
+   NB_SHIFT only once ! (in binit()
+
+4) There are 4 masks in the bstandard.h
+   BMASK_ROUND
+   BMASK_SWAP
+   BMASK_SHUFFLE
+   BMASK_BUFFER
+
+   These masks can be used with the varinit->MISC variable.
+   By default, the binit() will initialise varinit->MISC to:
+
+   varinit->MISC = 0;
+
+   varinit->MISC ^= BMASK_ROUND;
+   varinit->MISC ^= BMASK_SWAP;
+   varinit->MISC ^= BMASK_SHUFFLE;
+   varinit->MISC ^= BMASK_BUFFER;
+
+   This will enable the algorithm to use dynamic Round, Swap, shuffle
+   and buffer. (for an explanation about what this does please read
+   the technical html documentation).
+
+   If you want to disable some or all of these new feature do AFTER 
+   binit()
+
+   varinit->MISC = 0;
+
+   varinit->MISC ^= BMASK_ROUND;
+   varinit->MISC ^= BMASK_SWAP;
+
+   This will only enable dynamic round and swap
+
+   or to diable everything:
+   varinit->MISC = 0;
+
+5) varinit->SEED variable type has changed from int to TYPE_INT,
+   now it is defined as follow:
+
+   TYPE_INT varinit->SEED;
+
+6) New function: 
+   RETURN_TYPE bssl(int level, int *round, int *block_crypt,
+                    int *block_shuffle, globalvar *, int mode)
+
+   levels currently available:
+   D_ = Dynamic
+                  Keylength|Key Buffer|D_Buff|D_Round|D_Swap|D_Shuf|Power
+   BSSL_VLOW:     128      |8         |no    |no     |no    |no    |2
+   BSSL_LOW:      128      |8         |no    |no     |yes   |yes   |3
+   BSSL_MEDIUM:   128      |16        |yes   |yes    |yes   |yes   |4
+   BSSL_HIGH:     256      |16        |yes   |yes    |yes   |yes   |4
+   BSSL_VHIGH:    512      |32        |yes   |yes    |yes   |yes   |4
+
+                  Round|Block_Crypt|Block_Shuffle
+   BSSL_VLOW:     2    |0          |4
+   BSSL_LOW:      2    |0          |4
+   BSSL_MEDIUM:   2    |0          |4
+   BSSL_HIGH:     2    |0          |4
+   BSSL_VHIGH:    4    |0          |4
+ 
+   default = BSSL_MEDIUM        
+
+   This function should be called after binit(), it will overwrite some
+   of the globalvar variables.
+   This function returns the power level !
+   
+7) You can now use block crypt (bc) >= 1 with bfile and bstream
+   when you are using power 0 or 1
+   This is a new feature, although it has been carefully tested you
+   should be ... hum... careful !
+

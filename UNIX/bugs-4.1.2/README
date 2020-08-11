@@ -1,0 +1,183 @@
+17 January 2020
+Mauritius
+
+martinez@elysiumsecurity.com
+
+Project WebSite:  http://www.elysiumsecurity.com
+
+Windows version. 
+Unix version : available 
+ 
+lib version     :   4.1.0 - "IBIZA"
+Unix Package	:   4.1.2
+Windows Package :   4.1.1
+
+          B U G S 
+
+Big and Usefull Great Security 
+          V 4.1.2
+
+DYNAMIC CRYPTOGRAPHY ALGORITHM
+
+-------------------------------
+
+       USE THESE PROGRAMS AND LIBRARY AT YOUR OWN RISK !
+
+       I AM NOT RESPONSIBLE FOR ANY POSSIBLE DAMAGE MADE
+       WITH THESE PROGRAMS OR LIBRARY.
+
+       THE LIBRARY AND THE APPLICATIONS HAVE BEEN CREATED BY 
+       SYLVAIN MARTINEZ. 
+
+			--------------------------------
+			DYNAMIC PRIVATE KEY CRYPTOGRAPHY
+			--------------------------------
+
+
+NOTE            [15/09/03]
+CONTEST         [26/07/02]
+INTRODUCTION    [26/07/02]
+GREETINGS       [15/09/03]
+INFORMATIONS    [15/09/03]
+
+
+NOTE 
+----
+
+!! THE LIBRARY VERSIONS FROM --- 4.0.0 --- 
+   ARE NOT COMPATIBLE WITH THE OLDER VERSIONS !! 
+
+
+For the latest information about this project please go to the official
+project home page 
+
+This new version is NOT compatible with the old versions (1.x, 2.x, 3.x).
+PLEASE READ THE CHANGES and DEVELOPPER DOC FILES !
+as you will have to recompile/change your applications to use this new library. 
+
+The "cryptedtext" file is there for the `make test`
+The original file was: "If you can see this BUGS is working !"
+
+This project is "OPEN SOURCE" and under the GNU/GPL License. This means you
+can use it for free. However you must respect the following conditions:
+(Based on the cryptlib license example)
+
+ - You must give the authors credit in your software and/or documentation:
+   Sylvain Martinez
+
+ - If you make any changes to the code, you should send a copy of the changes to
+   the author or authors to allow them to integrate them into the code. This is
+   to allow a central consistent version to be maintained.
+
+ - Any software you create with this code may not be merely a set or subset of 
+   BUGS, with or without minor added functionality or a different interface. 
+   In particular you can't distribute BUGS (or any modified form of it) as your
+   own encryption product. This is to stop people adding their own wrappers
+   and selling it as "their" encryption product.  
+
+
+CONTEST (2015 update: context closed)
+-------
+
+The 2 contests are now over and nobody managed to decipher the crypted files
+and win the 100 GBP. They were both running for almost 2 years. 
+Please refer to the BUGS project web page for the solutions.
+
+I might start a new contest soon.
+
+For more information please read the README file in the contest/ directory
+
+
+INTRODUCTION
+------------
+
+Please read the documentation in the doc/ directory before
+asking me questions about the algorithm !
+
+This new library version is named "IBIZA"
+
+This package includes a C library and some sample programs that 
+demonstrate that this library is ... powerful !
+It has now been tested for years and I received many reports highliting
+any weaknesses found. This library has reach a strong security level now.
+
+It is a cryptography library, you can crypt any type of data.
+Your key length to crypt is ... unlimited :)
+It is a PRIVATE KEY Algorithm.
+it is also a DYNAMIC CRYPTOGRAPHY ALGORITHM
+I may do later a PUBLIC KEY Algorithm.
+
+You can generate passwords, manage users, hide text in file, 
+have a secure chat, etc
+
+In fact, this project became one of my first interest !
+
+Thanks to everybody who've shown me their support !
+even a small email is always welcome :O)
+thank you !
+
+All the comments are welcome ! 
+So please, just let me know what you think about this application,  
+and even better, about the crypt algorithm. 
+
+For any comments, bugs report, support, send me an email 
+
+please, add [BUGS] at the begining of your subject if you 
+want a quick answer.
+
+
+GREETINGS
+---------
+
+BIG THANKS TO:
+  
+  M.:     Thanks for your support and understanding!
+
+  Simon Huot: Thanks for the really good work you've done on analysing the
+              security of BUGS v.3.x 
+              You found many weaknesses and gave me a lot of improvement
+              ideas. This new version (4.0.0) has been done because of 
+              you ! ;o)
+
+  Trevor Tippins: Your comments on my algorithm have been really valuable
+                  and really motivated me to carry on improving it !
+
+  GNU Team : Thanks for all your free products !
+ 
+  LINUX team : Computer world without linux ?? ahah let me laugth :)
+
+  KDE's Team : Thanks for your wonderfull and really useful Windows Manager 
+
+  Emanuel Bouvier : For your help in Delphi and your free beers at the madison 
+  
+  Stephane Guelfo : Your help has been very helpfull many years ago, for 
+                    the bits swapping !
+
+  Mr Oswald : Even if I have only 10 minutes to speak when I have a meeting 
+              with you about my algorithm (hum ...), thanks for the enhancement
+              idea you told me (bits operation part, and some improvements of my
+              bilateral swap part) 
+
+  Stephan Legrand : Who sent me a patch for BSD OS.
+  
+  J. Ellis: Thanks for your help in the documentation, and for your
+               friendship
+
+  F. Martinez: Thanks for the official bcrypt and BUGS logos !
+                    They are great !!!
+
+  T. Martinez : The last, but not the least.
+                     well, little brother, if you didn't pushed me to do
+                     a crypt's algorithm I would have probably never done one.
+                     He has created a windows application using the BUGS
+                     library it is on the BUGS official web site and it's
+                     called: winbugspro
+                     Ok, let's speak a bit more :)
+                     My little brother has been programming
+                     since he was 7 years old. after having reproduced
+                     The Windows 95 GUI on his Amiga when he was 12 years old, 
+                     an Artificial Intelligence module, a 3d vector drawing 
+                     convertor is now working on some DELPHI components 
+                     I bet, we will hear about you soon, brother ... 
+
+    

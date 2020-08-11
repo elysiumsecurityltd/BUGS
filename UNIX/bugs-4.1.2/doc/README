@@ -1,0 +1,27 @@
+23/10/00
+London
+
+Sylvain Martinez
+
+This is the FULL English documentation of the BUGS project.
+
+You can find an introduction to cryptography as well as the full BUGS Technical
+Documentation. 
+You can either use the index/html in this directory or the fulldoc/index.html
+
+The fulldoc/dev_english.txt and fulldoc/dev_french.txt documentations are a listing
+of the different functions you can use in your own program to use the BUGS algorithm
+library. But let's face it, the best way to learn is to look at the different
+applications which are in this package.
+
+You can find my CV in the "cv" directory.
+
+You can find in the "history" directory the first documentation 
+I ever written for this project, back in 1995. This is only in French.
+I leave it for ... sentimental reason ;o)
+I just like to remimber how far I have gone from the original goal
+I had in 1995. In a way... the idea is still the same.
+
+Regards,
+Sylvain.
+
