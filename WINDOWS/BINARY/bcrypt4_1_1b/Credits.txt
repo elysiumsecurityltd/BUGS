@@ -1,0 +1,48 @@
+London
+11 November 2000
+Sylvain Martinez
+
+
+				CREDITS
+
+Here are the name of the people who contributed to this project.
+
+* UNIX and Cryptography Library Programmer, design, algorithm
+Sylvain Martinez 			martinez@elysiumsecurity.com
+
+* Windows Project manager, coordinator, testing
+Sylvain Martinez			martinez@elysiumsecurity.com
+
+* Windows Cryptography Library port
+Sylvain Martinez			martinez@elysiumsecurity.com
+
+* Windows GUI Programmer
+Sylvain Martinez			martinez@elysiumsecurity.com
+T. Martinez				N/A
+
+* BUGS and Bcrypt Logo
+F. Martinez				N/A
+
+* FreeBSD port 
+Stephane Legrand			stephane@lituus.fr
+
+* OpenBSD Testing
+Christophe Ternat			christophe.ternat@epita.fr
+
+* Unix random seed initialisation
+John Viega					viega@list.org
+
+* ISAAC Random Number Generator
+Bob Jenkins					??
+
+* True64 Testing
+Jeremie Petit				jeremie.petit@compaq.com
+
+* Algorithm Security Analysis and Optimisation
+Simon Huot                  sh_ct@hotmail.com
+
+*General Library Testing
+T. Martinez     	       N/A
+Sylvain Martinez            martinez@elysiumsecurity.com
+
+

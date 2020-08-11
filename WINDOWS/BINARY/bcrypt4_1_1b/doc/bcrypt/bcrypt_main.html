@@ -1,0 +1,293 @@
+
+<html>
+<a name="_TITTLE"></a>
+19/11/00<br>
+London, UK<br>
+Sylvain Martinez<br>
+<br>
+<a href="mailto:martinez@elysiumsecurity.com">martinez@elysiumsecurity.com</a>
+<br>
+<br>
+<h1>
+<center>
+BCRYPT<br>
+-WINDOWS-
+<br>
+DOCUMENTATION
+</center>
+</h1>
+<br>
+<br>
+
+<hr>
+
+<h1>
+ACKNOWLEDGEMENTS
+</h1>
+
+I would like to thank you my brother Thierry Martinez for testing this application and Florent Martinez for creating 
+the "Bcrypt" and "Bugs" official Logos.
+<br>
+<br>
+<hr width=75%>
+<h2>
+<a name="_0"></a>
+Getting Started
+</h2>
+<br>
+This application is using the BUGS algorithm, which is a symetric dynamic cryptography algorithm. This means:
+<br>
+a) You need to enter the EXACT same password you used to crypt a file in order to decrypt it
+<br>
+b) By only changing few parameters you are changing the way the algorithm behaves and therefore you need to remimber any parameter changes you have made. This makes the encryption security level stronger.
+<br>
+<br>
+The algorithm DOES NOT check if a file has been decrypted correctly, because it can't tell. Therefore if you decrypt a file with a wrong password or wrong parameter settings the application will still create a "decrypted" file but this decrypted file would just have some "garbage data". 
+<br>
+If you forgot your password, noone, even not me, could decrypt your file. Be careful use this software at your own risks as I cannot be held responsible if you loose any data.
+<br>
+<br>
+Enjoy the power of a Dynamic Cryptography Algorithm.
+<br>
+This software is Free under the terms of the GNU License.
+<br>
+<br>
+<hr width=75%>
+
+<h2>
+<a name="_1"></a>
+I General Options
+</h2>
+<h3>
+<a name="_1.1"></a>
+I.1 Options
+</h3>
+You can change many options with BCRYPT.<br>
+The options menu is accessible when you click to the OPTIONS button in the main window<br>
+You also have a "quick" access to the option by clicking on the button which appears once
+you put the mouse cursor on the GREEN information window.<br>
+This allows you to quickly change some of the most common options.<br>
+<br>
+<h3>
+<a name="_1.2"></a>
+I.2 Preset Options (BSSL)
+</h3>
+BSSL stands for <b>B</B>ugs <b>S</B>ecurity <b>S</B>tandard <b>L</B>evel.<br>
+The preset options automatically change different parameters for you.<br>
+Even the lowest BSSL (0)Very Low security is really strong.<br>
+The higher BSSL you use the slower BCRYPT will crypt/decrypt a file.<br>
+The custom BSSL is automatically set if you put your own parameters.<br>
+<br>
+
+
+<hr width=75%>
+
+<h2>
+<a name="_2"></a>
+II  Basic Options
+</h2>
+<h3>
+<a name="_2.1"></a>
+II.1 Keylength
+</h3>
+Use the arrow keys to change the value of your Keylength.
+<br>
+in Theory the biggest your keylength the stronger the encryption, but it will also be longer to proceed.
+<br>
+<h3>
+<a name="_2.2"></a>
+ II.2 Power
+</h3>
+At the present ime you have 5 different power level available.
+<br>
+By the default the bcrypt application is using the highest power ([4])
+<br>
+<br>
+[0] - Seed
+<br>
+This is the lowest power available and the crypt's algorithm will only seed your file, in other words
+<br>
+it will only do a XOR between your key and your data.
+<br>
+<br>
+[1] - Probability Seed<br>
+This is really similar to power [0] but it will also use a random number to the key, therefore if you crypt the same file with the same password the result will be each time different. This increase slightly the size of your original file (if you are using a 128 bits key, 16 characters, then 16 characters will be added to your file).<br>
+<br>
+[2] - Shuffle<br>
+This is using the data's file to crypt the file itself. This done by taking some pseudo-random block, function of your key, and mixing them together by doing a Logical operation (OR, XOR or AND). The result is then used to crypt one of the file's block by doing a XOR. The process starts again until all the file's block are crypted.<br>
+<br>
+[3] - Shuffle and Seed<br>
+This is really similar to the power [2] but this time the algorithm will also seed the file as done in power[0]<br>
+<br>
+[4] - Shuffle and probability Seed<br>
+This is really similar to the power [3] but this time the algorithm will also use a random number. This is the most powerful option as well as the default one.<br>
+<h3>
+<a name="_2.3"></a>
+ II.3 Key Type</h3>
+You can either choose to crypt the file from a password or by using the data contained in a file as a key. You might need to do so when you are using really big keylength because you won't be able to remimber a 1024 characters password !<br>
+<h3>
+<a name="_2.4"></a>
+ II.4 Logs</h3>
+You can select the level of information the cryptography library will generate.<br>
+Quiet: no or few information will be generated<br>
+Verbose: This is the default mode and only the most useful information will be generated.<br>
+Debug: This can generate REALLY BIG files when crypting big files, only use this if you are curious or if there is a problem and want to know why.<br>
+<br>
+<hr width=75%>
+
+<h2>
+<a name="_3"></a>
+III Advanced Options<br>
+</h2>
+<a name="_3.1"></a>
+<h3>III.1 Block Crypt</h3>
+You can specify the size of the block you want the algorithm to use. This is the "working aread". For more information please read the BUGS Documentation.<br>
+<br>
+If you put '0', which is the default value, the algorithm is going to consider your<br>
+file a one big block. In other words the size of your file would be the size of the <br>
+block used by the algorithm. <br>
+1) This means that if you have select power [4] for example and a block crypt of 0,<br>
+the algorithm will seed and shuffle your file by using any block within the file.<br>
+If, on the other hand, you would have chosen a block crypt of 512 what would have happened is:<br>
+2) The algorithm is going to work within block of 512 bits. So it would seed and shuffle first the 512 bits and then the following 512 bits and so on. Therefore it would change completely th eway the algorithm works. <br>
+Why ? <br>
+Because in case 1) the algorithm could start to seed a block at the end of the file, and could use a block at the end of the file and one at the begining to create the key used during the shuffle process. In case 2) the first phase of the encryption will only be able to take a block within the first 512 bits of the file for the seed or the shuffle process.<br>
+The encryption result for the same file and same password would then be totelly different. This is dynamic cryptography !<br>
+<h3>
+<a name="_3.2"></a>
+III.2 Block Shuffle</h3>
+You can specify the size of the block used during the shuffle process. For some algorithmic reasons there are some restrictions. The block shuffle can only be a multiple of the number of bytes used by your OS default integer type. On a 32 bits OS, such as Windows it is 4 bytes. <br>
+Therefore if you try to give the value 5 to the block shuffle the application will automatically convert it to a multiple of 4 and the value will then be 8.<br>
+<h3>
+<a name="_3.3"></a>
+III.3 Round
+</h3>
+This is to do with the function that generates the keys and with the number of swap<br>
+will be performed to the key bits. By default it is 2 which makes the algorithm to swap
+all the bits of the key at least once. This should be enough. If you are paranoid you
+can ask the algorithm to swap the bits more than once, this might increase the time to
+crypt a file and it is not really sure it is much more secure. But again if you change
+this value, you change the way the algorithm works and if you crypt a file A with a
+password B with a complexity = X you won't be able to decrypt the file A with B if you
+haven't got the correct value of X. This, in a way, is a security option !<br>
+
+<h3>
+<a name="_3.4"></a>
+III.4 Key Buffer
+</h3>
+This will set the number of keys to be generated and stored in the KEY buffer during the SEED process.<br>
+Indeed, the seed process will generate a pseudo_random key from the KEY BUFFER and then
+XOR the result to the file.<br> Then the result will replace one of the KEY in the KEY BUFFER
+and the process will start again.<br>
+That way there is less "key dependancies" and cracking the algorithm is much more 
+difficult/long.<br>
+
+<h3>
+<a name="_3.5"></a>
+III.5 Modulo Swap
+</h3>
+This variable is used during the swap process and determines when the algorithm should
+be using BIG or SMALL modulos when swapping bits.
+<br>
+For this variable you can only select if you want it to ge dynamic or not.<br>
+<br>
+<hr width=75%>
+<h2>
+<a name="_4"></a>
+IV Dynamic Options<br>
+</h2>
+
+In the Advanced optinos menu you can select if you want some variables to be dynamic or not.
+<br>
+What this means is that is you choose a variable to be dynamic (tick on) then the algorithm
+will be allowed to "dynamically" change the value of the variable in function of the password
+you've entered.<br>
+<br>
+For exemple, if you enter Round = 4 and you select this variable to be dynamic. <br>
+Then, depending of your password, the Round value during the crypt/decrypt process can 
+change betweem 5 and 10. (double the value is the maximum).
+<br>
+<br>
+This gives an extra security layer ! as even if soemone find out what parameters you've
+initialy entered, if he/she doesn't know your password, he/she cannot know the 
+parameters that have actually been used ! only a range of value !
+<br>
+<bR>
+<hr width=75%>
+<h2>
+<a name="_5"></a>
+V MISC Options<br>
+</h2>
+
+<h3>
+<a name="_5.1"></a>
+V.1 Cipher Method</h3>
+If you want to crypt a file and copy and paste the result in an email, you need to select
+the cipher mode to ASCII. This will convert the cipher text into a BASE10 ASCII format.
+<br>
+If you receive such an email, to decrypt it you also need to select the ASCII mode.<br>
+<br>
+The binary mode is the default one as it generates smaller files and is faster !<br>
+but you can't really copy and paste a cipher files generated in BINARY mode as 
+some characters might be converted to signed char !<br>
+
+<h3>
+<a name="_5.2"></a>
+V.2 Buffer Method</h3>
+You can tell the algorithm if you want it to work directly to the disk which means loading each block it is currently working on. Or you can use the memory method (default) to load first all the file into memory and then access the different block of the files from the memory.<br>
+The memory options is much faster because it only needs one disk access in order to load the file. The Hard-disk method is only there if you want to crypt a 12Gb file and you haven't got 12Gb of RAM.<br>
+The 2 methods produce the same result.<br>
+<h3>
+<a name="_5.3"></a>
+V.3 Random Algorithm</h3>
+You can select which random algorithm will be used by the algorithm. By default it is using ISAAC which is supposed to be much stronger than the standard C random function. You should always use ISAAC. Even if you don't use ISAAC it should not really matters but... well... this application i about security !<br>
+<h3>
+<a name="_5.4"></a>
+V.4 Bcrypt  Threads Priority</h3>
+This will change the priority given to the bcrypt's thread by Windows. The highest value you give to this option the quicker bcrypt should run.<br>
+<br>
+<br>
+<hr width=75%>
+<h2>
+<a name="_6"></a>
+VI Information<br>
+</h2>
+In the information box you can see the BCRYPT version number as well and the BUGS crpytography library used by the application. <br>
+You can also access the HELP menu from here.<br>
+<br>
+<hr width=75%>
+<h2>
+<a name="_7"></a>
+VII Main<br>
+</h2>
+This is where you can crypt/decrypt a file, generate a key file or hide a file into another.<br>
+Crypt:<br>
+You need to select a source and destination file. If you select the same filename for the destination than the source file then the source file will be overwritten !<br>
+You need to enter your password twice or if you selected a keyfile as the type of key you want to use, you will have to select the file that will be used as a key.<br>
+<br>
+Decrypt: <br>
+This is really similar to the crypt process but here you are only asked to enter your password once. Also, if the destination and source filename are the same the crypted file (source) will be backed up by adding a ".BUG" to its name. <br>
+This is done because if we were replacing the crpyted file by the encrypted file, if you were entering the wrong password there would be no way to recover the original encrypted file.<br>
+<br>
+Keyfile:<br>
+To generate a keyfile of the size of your keylength specified in the Basic Options you can either choose a random initialisation or if you really don't trust any random function you can enter a password initialisation by typing a 16 characters password.<br>
+<br>
+Hide:<br>
+You can choose to Hide a file into another. If you choose to hide it at the end (default) the Source file will be added at the end of the Destination file. The destination file is therefore used as a "carrier" this is really simple but it works fine with any kind of file (WAV, JPG, ZIP, etc)<br>
+If you choose to Hide a file at the begining of another file this might be easier to detect as, for example, if you add a file at the begining of a JPG then the picture won't be considered as an image file because the header of the file won;t be a JPG header.<br>
+<br>
+<hr width=75%>
+<h2>
+<a name="_8"></a>
+VIII  Logs<br>
+</h2>
+<a name="_8.1"></a>
+<h3>VIII.1 Basic Logs</h3>
+This is where the applications logs are displayed. This can give you some useful tips if you haven't entered the required parameters.<br>
+<br>
+<a name="_8.2"></a>
+<h3>VIII.2 Advanced Logs</h3>
+This is where the cryptography library logs are displayed. This is really useful if an encryption/decryption error happened. You cn change the level of information that is generated by changing the "logs level" in the basic options.<br>
+<br>
+<br>
+<br>

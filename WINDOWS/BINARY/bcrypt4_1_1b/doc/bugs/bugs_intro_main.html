@@ -1,0 +1,722 @@
+<html>
+<head>
+<title>BUGS DYNAMIC CRYPTOGRAPHY ALGORITHM</title>
+</head>
+<a name="_TITTLE"></a>
+<p>
+<b>
+Sylvain MARTINEZ
+<br>
+<br>
+martinez@elysiumsecurity.com<br>
+<br>
+</p>
+
+Document Version 3.0b (23/10/2000)<br>
+
+Document based on my UK BSc Project in Computer Science in 1998
+<br>
+<br>
+<p> 
+<H1>
+<center>
+INTRODUCTION TO CRYPTOGRAPHY <br>
+</center>
+</H1>
+</p>
+<br>
+
+WARNING: Please note this documentation may be out of date, a newer documentation has since been written (2009) and is available on the project main website: 
+<br><a href="http://www.elysiumsecurity.com"> http://www.elysiumsecurity.com </a></b></p>
+
+<br><br>
+<hr>
+<br>
+
+<p>
+<a name=ABSTRACT>
+<h2>
+ABSTRACT
+</h2>
+ </a>
+</p>
+
+
+This document is part of the BUGS Cryptography project documentation.
+It is based on the report of my final year project in Computer Science at the
+University of TEESSIDE (UK) which consisted of finding information about
+cryptography, creating my own cryptography algorithm and creating a Windows 95
+cryptography application.<br>
+<br>
+This project started as a personal project back in 1995, became my Bsc
+project in 1998. In 2000, I have created a new algorithm based on the original one.
+BUGS is now a personal project again.
+<br>
+Each chapter's contents is divided into several parts which should help the
+reader to easily find what he is looking for. Most of the chapters and sections
+have an introduction to help their understanding and to give a quick overview
+of their content.
+<br><br>
+As a background in cryptography is needed to evaluate the work done, this
+introduction to cryptography should help the reader to appreciate the work done
+in this BUGS cryptography project.
+<br>The reader does not require any special computer skills to understand this
+report, but a previous knowledge of computer programming would be helpful.
+<br>
+<br>
+Finally, a lot of people asked me: "Why creating another Symetric Cryptography Algorithm" especially
+since AES is now available. This project is an amateur one, it is Open Source, free, for developpers and
+it is not just a cryptography library but also a suit of cryptography softwares. I do not pretend to
+have created something better than DES, AES, whatever_ES but just something I hope is secure enough to
+protect personal data. The security level of this algorithm is currently being tested on the Internet,
+and the feedback is very good so far.
+<br><br>
+<hr size=2 width="75%" align=center>
+
+<p>
+<a name=THANKS>
+<b>
+<h2>
+ACKNOWLEDGMENTS
+</h2>
+</b>
+</a>
+
+<p>I would like to thanks Trevor Tippins who highlighted many weaknesses in my
+previous algorithm and then pushed me to improve it. I would especially like to
+thank Joanne ELLIS who corrected the first version of this report in 1998. I
+would like to thanks the University of TEESSIDE to let me do the previous
+version of this algorithm as my Bsc project. The GNU, Linux and KDE team who
+provide a lot of free development software. All the people around the world
+who tested my applications and sent me feedback emails. My parents who support
+me in my choices. My Brother Florent for the different BUGS logos. Finally my 
+other brother Thierry Martinez, 15 years old, who pushed me into the cryptography world
+in 1995 by asking me a simple question: "Why cryptography is difficult to master ?" and always
+pushed me to do my best by being unusually good at computing at his age.</p>
+<br>
+<hr size=2 width="75%" align=center>
+<br>
+
+<a name="_Toc415913671"><b>
+<h1>
+<center>
+CHAPTER I
+</center>
+</h1>
+</b></a>
+
+
+<a name="_Toc415913672">
+<h2>
+I.1 INTRODUCTION
+</h2>
+</a>
+</b>
+
+<p>Privacy is a sensitive subject that affects everyone. We all use various
+techniques to safe guard our privacy, such as:</p>
+
+<p>- When you write a letter for a job, your wife, or anything else private you
+use an envelope to send it. </p>
+
+<p>- When you use your credit card you use a <i>secret</i> code number.</p>
+
+<p>- You sometimes have to speak to someone in private.</p>
+
+<p>There are many other examples, but already you can see how important privacy
+is for everybody, everyday.</p>
+
+<p>With computers, most of the time you use sensitive data that has to be
+secret (e.g. assessment marks, financial accounts, etc). With the
+Internet you can use your computer like a telephone or like a post office, with
+the disadvantage that everybody connected to the network could have access to
+your data. This is why, especially with computers, privacy is important.
+Different levels of security (computer security, network security, etc) have to
+be considered.</p>
+
+<p>This area became one of my first interests since 1995, particularly one
+part, cryptography. Cryptography can be compared to an electronic safe where
+you put your private data. One of the reason for this interest is that I think
+with cryptography you always have to think about what an intruder could do. I
+usually compare cryptography to a chess game, in that you have to think about
+your own tactics and also your opponents'.</p>
+
+<p>
+<a name="_Toc415913673">
+<h2>
+I.2 BUGS PROJECT
+</h2>
+</a>
+<p>
+The BUGS Cryptography project is a good example about how a block cipher cryptography algorithm works.
+After reading this document the reader should read how this new block cipher algorithm has been designed as 
+it is quite easy to understand.<br>
+BUGS also has some interesting features such as dynamic algorithm, multiplaform, open source and free.
+</p>
+
+<hr size=2 width="75%" align=center>
+
+<a name="_Toc415913675"></a>
+<h1>
+<center>
+CHAPTER II
+</center>
+</h1>
+
+<p>
+<a name="_Toc415913676">
+<h2>
+II.1 INTRODUCTION
+</h2>
+</a>
+
+<p>When you have an English text and you want to translate it into French, you
+use language translation. In this case, any French person could read your new
+text and understand it. However, if you have the same English text but you do
+not want anybody else, except yourself, to be able to understand it, you use
+cryptography.</p>
+
+<p>Cryptography has been used for a very long time, the roman emperor Cesar is
+the first famous person who used it for his military campaigns. These last few
+years the army has mainly used it but since the computer has become a common
+tool, cryptography is used and needed by everyone.</p>
+
+<p>Each country has different laws about the use of cryptography for various
+reasons, because in some country the use of strong cryptography is illegal, it
+is a sensitive subject that makes it really interesting and in a way,
+dangerous. Because fact that more and more
+companies want to sell products on the Internet, the cryptography status is changing
+to allow the customers to secure their transactions.</p>
+
+<p>Cryptography usually uses a lot of mathematical formulas and logical functions. The
+science is quite new for the public, this is why it is a very difficult subject,
+but more and more people are interested in it and a lot of book dealing with
+the subject have been written and it is now easy to find good cryptography
+information. It seems that the strongest cryptography algorithms are now
+available to the public even if it is very difficult to understand them.
+Indeed, the best way to know if a cryptography algorithm is strong is to make its source code and 
+documentation available to the public. If no one can break it then it is safe to use it:
+if you hide a message somewhere, once someone finds it, he can read it. However, if you
+put this message in a safe that is publicly available and nobody is able to open it
+then your message is safer. The point is to know if it is more difficult to
+find a hidden message than to open a safe, keeping in mind that a mole could be
+anywhere. With cryptography it is the same problem.</p>
+
+
+<a name="_Toc415913677">
+<h2>
+II.2 DEFINITIONS
+</h2>
+</a>
+
+<a name="_Toc415913678"><b><i>
+II.2.1 Terminology</span></i></b>
+</a>
+
+<p>
+To make this report easier to understand, I will
+give the definition of different terms I will use.</p>
+
+<p>
+<b>Clear text</b>: An understandable message,
+usually the original.</p>
+
+<p>
+<b>Cipher text</b>: An incomprehensible message,
+usually the result.</p>
+
+<p><b>Password</b>: A secret string of characters.</p>
+
+<p><b>Crypt</b>: Transform a clear text into a
+cipher text, usually with a password.</p>
+
+<p ><b>Decrypt</b>: Transform a cipher text into a
+clear text, usually with a password.</p>
+
+<p><b>Key</b>: Some data that will be used into the
+message crypt process. It can also be used like a password, the difference is
+in this case that it is a long string of characters and numbers you can not
+remember as is very long and complex. A key could be compare to a cipher
+password. </p>
+
+<p><b>Private</b> <b>key</b>: This key is personal
+and only known by one person.</p>
+
+<p><b>Public</b> <b>key</b>: This key is available to everybody, it is now secret.
+</p>
+
+<br>
+<a name="_Toc415913679"><b><i>
+II.2.2 Algorithms</i></b>
+</a>
+
+
+<p>Many different cryptography algorithms have been
+done, but there are two main algorithms used in cryptography. Here is a general
+overview of these two cryptrography standards.</p>
+
+<p><a name="_Toc415913680">
+II.2.2.1 Private key algorithm</a>
+</p>
+
+<p >A private key algorithm uses one password (or one
+private key) to crypt a message, to decrypt it the same password is used, 
+<a href="#_2.1"><b>Figure 2.1</b></a><b> </b>shows this process. The same
+algorithm or a different one can be used to crypt and decrypt.</p>
+
+<p ><a name="_Toc415913681">
+II.2.2.2 Public key algorithm</a>
+</p>
+
+<p>A public key algorithm consists of a public key
+(B) used to crypt a message and a private key (A) used to decrypt the message,
+for one public key there is one private key (A1, B1) and only the private key
+that belongs to the public key can decrypt a message crypted by the public key,
+<a href="#_2.2"><b>Figure 2.2 </b></a>shows this process.</p>
+
+<p>Thanks to that, you can give your public key to
+everybody, if they want to send you a message, they crypt the message with your
+public key, and only you, who know your private key, can decrypt this message.
+If you want to send them a message, then you have to use their public key to
+crypt the message.</p>
+
+<p>This algorithm can also be used to sign a message
+to prove that it is really you who is sending a message, to do so you crypt the
+message with your private key that can be decrypted only with the public key.
+This is a bit difficult to understand, but just means that if you crypt a
+message with one of the keys (public or private) you can decrypt it only with
+the other key; if someone wants to imitate your signature he will fail because
+he will crypt his message with your public key, but as this message can only be
+decrypted with the private key, nobody will be able to decrypt it!</p>
+
+<p>This feature is really useful in business or for
+the army.</p>
+
+<p><br>
+<br>
+<a name="_2_1"></a><img border=0 src="images/2_1.gif"></p>
+
+<p><i>Figure 2.1 Private key algorithm</i></p>
+
+<p><br>
+<br>
+<a name="_2_2"></a><img border=0 src="images/2_2.gif"></p>
+
+<p><i>Figure 2.2 Public key algorithm</i></p>
+
+
+
+
+<p><a name="_Toc415913682">
+<h2>
+II.3 CRYPTOGRAPHY STANDARDS
+</h2>
+</a>
+</p>
+
+<p>
+<a name="_Toc415913683"><b><i>
+II.3.1 Introduction
+</i></b></a>
+
+
+<p>A lot of cryptography algorithms have been
+created, it is not the aim of this report to go into great detail about
+cryptography, so only two of the most famous and used cryptography algorithms
+are going to be quickly explained to give a general idea of how to crypt a
+message.</p>
+
+<p>
+<a name="_Toc415913684">
+<b><i>
+II.3.2 DES
+</i></b></a>
+</p>
+
+<p>DES stands for &quot;Data Encryption
+Standard&quot; and is at the moment the most used algorithm in the world [1],
+being used by the American government to secure their sensitive data. It has
+been created by IBM (International Business Machines Corporation) [2] in 1977
+and is a private key algorithm.</p>
+
+<p>It is a block cipher algorithm that crypts data
+by 64 bits length block, that means that the clear text is divided into 64 bits
+length block and each block is crypted by 16 complex operations. The entire 64-bit
+length crypted block constitutes the final cipher text. The decrypt algorithm
+is nearly the same as the crypt algorithm, the same key (the private key) is
+used to crypt and to decrypt a message; the bigger your private key is the
+safer it is. Then, if you want to send a secret message to someone you have to
+find a secure way to communicate to him the private key used to crypt it; that
+is the weak point of the algorithm.</p>
+
+<p>
+<a name="_Toc415913685">
+<b><i>
+II.3.3 RSA</span>
+</i></b></a>
+</p>
+
+<p>RSA [3,4] is the initial of the name of its
+creator: Ron RIVEST, Adi SHAMIR and Leonard ADLEMAN. It is one of the first
+public key algorithms and was created in 1978. In fact there are two
+algorithms, one to generate the keys and one to crypt/decrypt the message; the
+pair of keys, one public and one private, are based on big first numbers and
+are the result of some calculations (modulo, Euclide's algorithm, etc). The
+algorithm that crypts/decrypts a message is a bloc cipher algorithm that is simpler
+than the DES algorithm but is much slower.</p>
+
+<p>The security of this algorithm is based on
+mathematical theories (big numbers factorisation), even if no real proof has
+been given to demonstrate that these mathematical theories are not easily
+&quot;breakable&quot;, they have not been broken for 20 years.</p>
+
+<p><a name="_Toc415913686"><b><i>
+II.3.4 Conclusion
+</i></b></a>
+</p>
+
+<p>These two algorithms have different concepts, but
+neither of them is better than the other, they have their own advantages. A
+good idea is to use both of them choosing which one depending on its
+suitability to a specific job. It is why DES is usually used to crypt the
+message, and RSA is used to communicate only the DES private key used to crypt
+the message.</p>
+
+<p>The reason for this choice is because DES is
+faster than RSA and more difficult to break. However, to communicate the DES
+private key a secure solution has to be found. RSA has a pretty good level of
+security and you do not have to send your private key to the recipient, only
+your public key. This is why RSA is used to crypt the DES private key, then the
+crypted message and the DES crypted key are both sent to the recipient.</p>
+
+<p>Here is an example represented by <a href="#_2.3"><b>Figure
+2.3:</b></a></p>
+
+  <li>The &quot;Sender(1)&quot; wants to send a message to the &quot;Recipient (2)&quot;, he
+      knows his own DES private key (A1) and gets the &quot;Recipient (2)&quot;
+      RSA public key (B2). </li>
+  <li>The &quot;Sender
+      (1)&quot; crypts his message using his own private key (A1) with the DES
+      algorithm and crypts this private key (A1) using the &quot;Recipient
+      (2)&quot; RSA public key (B2) with the RSA algorithm. </li>
+  <li>After, the
+      &quot;Sender (1)&quot; sends the crypted message and the crypted key to
+      the &quot;Recipient (2)&quot;. </li>
+  <li>When the
+      &quot;Recipient (2)&quot; receives them, he first has to decrypt the DES
+      private key (A1) to be able to decrypt the message; so he decrypts it
+      using his RSA private key (A2), the only key able to decrypt something
+      that has been crypted with the RSA public key (B2). </li>
+  <li>When he knows the private
+      key (A1) used to crypt the message, he uses it with the DES algorithm to
+      decrypt the message sent by the &quot;Sender (1)&quot;.</li>
+
+
+<p><br>
+<br>
+<a name="_2_3"></a><img border=0 src="images/2_3.gif"></p>
+
+<p ><i>Figure 2.3 Use of private and public algorithm
+at the same time </i></p>
+
+<p><a name="_Toc415913687">
+<h2>
+II.4 POSSIBLE APPLICATIONS
+</h2>
+</a>
+</p>
+
+<p>
+<a name="_Toc415913688">
+<b><i>
+II.4.1 Introduction
+</i></b>
+</a>
+</p>
+
+<p>The aim of this section is to give concrete
+examples of professional cryptography used, which will help the reader to
+appreciate more the work done on the project.</p>
+
+<p>
+<a name="_Toc415913689"><b><i>
+II.4.2 Login password
+</i></b></a>
+</p>
+
+<p>In a computer network like at the University of
+Teesside, each student has an account were he works during the year, store his
+reports, tutorials and other personal data. This data is private to each
+student. To protect it from any evil possible action from someone other than
+the owner, the students have a password that they must use to access their
+data. This password is secret and stored in a password database. When a student
+logs onto the network he types his password, which is then checked with the one
+stored in the database. If someone succeeded to access these passwords it could
+be dangerous. This is why these passwords are crypted, thanks to this even if
+someone accesses the password database he will not be able to do anything</p>
+
+<p>To increase security, the algorithm used is a
+&quot;one way&quot; algorithm. This means that you can crypt but not decrypt.
+The interest of this is because as you cannot decrypt this cipher text it
+should be more difficult for an intruder to find the original clear text (in
+this case, the password). </p>
+
+<p>You may want to ask now: &quot;if it is not
+possible to decrypt the password stored in the password database, how does the
+system know if it is the right password that has been typed at the login
+?&quot;. The answer is you do not try to decrypt the password present in the
+password database. You just crypt the password typed by the user and you
+compare the cipher text generated (the password is crypted and the result is
+cipher text) with the user's crypted password stored in the password database.
+If the user did not make any mistakes while typing his password then the two
+cipher texts will be identical and the user is allowed to log onto the system.</p>
+
+<p>
+<a name="_Toc415913690">
+<b><i>
+II.4.3 PGP
+</i></b></a>
+</p>
+
+<p>PGP means &quot;Pretty Good Privacy&quot; and is
+an application used to crypt messages [5]. It has been created by Philip
+ZIMMERMANN and uses two different algorithms: RSA and IDEA which is similar to
+DES. </p>
+
+<p>To have a general idea of how this application
+works, you can have a look at <a href="#_2.3"><b>Figure 2.3</b></a> that
+describes the use of a private key and a public key algorithm at the same time
+</p>
+
+<p>This is the most famous application for crypting
+personal data such as letters, emails, a file or anything else you can find on
+a computer; because it is very powerful and has been developed on almost all
+existing computers (PC, Macintosh, Amiga, etc). In fact, it is the first
+application that has been developed for public as a pose to military use. It is
+maybe why PGP is becoming a standard application on computers. The only problem
+is the lack of a good Graphical User Interface (GUI) could discourage someone
+if he never used cryptography before.</p>
+
+<p><b><i>
+<a name="_Toc415913691">
+II.4.4 Conclusion
+</a>
+</i></b></p>
+
+<p>
+These two cryptography application examples show how it is possible to use
+cryptography practically, they are the most common. There are many other
+possible uses, for example, when two banks exchanging information, staff
+identification in a big company, military communication, computer voting,
+electronic money, mobile phones, etc…</p>
+
+<p>Most of the time, cryptography is used invisibly
+for the user.</p>
+
+<p>
+<a name="_Toc415913692">
+<h2>
+II.5 COMMON CRYPTOGRAPHY ATTACKS
+</h2>
+</a>
+</p>
+
+<p>
+<a name="_Toc415913693">
+<b><i>
+II.5.1 Introduction</span>
+</i></b></a>
+</p>
+
+<p>There are different ways to attack a cryptography
+algorithm. If the algorithm security is only based on its secret, once someone
+finds the algorithm source code it will be very easy to break it. Otherwise the
+two most common attacks are &quot;brute force&quot; and algorithm attacks [6].</p>
+
+<p>
+<a name="_Toc415913694">
+<b><i>
+II.5.2 Algorithm attacks
+</i></b></a>
+</p>
+
+<p>Sometimes a cryptography algorithm can have weak
+points, for example, with algorithms that just consist of adding the same
+number to all the password letters they are easier to break. This is because
+they are less complex, all you have to do is find the number used. This attack
+needs strong cryptography knowledge and understanding. It is only used for bad
+cryptography algorithms, but as with everything relating to computer science,
+it is very difficult to totally avoid making errors, so this attack is always
+the first one attempted. If no weak points are found the only attack that can
+be done is the &quot;brute force&quot; attack. </p>
+
+<p>
+<a name="_Toc415913695">
+<b><i>
+II.5.3 Brute force attack</span>
+</i></b></a>
+</p>
+
+<p>This attack is based on the cipher text generated
+by a cryptography algorithm. If someone can get into the password database then
+even if all the passwords in it are crypted, some software exists that simply
+try every possible passwords, crypts them and compares the cipher text
+generated with the one held in the password database. Of course, it would take
+too long to try all the possible passwords, present computers are not fast
+enough and there are too many possibilities. However, these software are quite
+intelligent and before trying a password like &quot;12%%*$$ù*r4&quot; they will
+try to find some information that concern the user like &quot;sister&quot;,
+&quot;05/06/1995&quot; or &quot;Joanne&quot;. Therefore, the user is warned to
+choose his password carefully otherwise it could be easy for someone to find
+it.</p>
+
+<p>
+<a name="_Toc415913696">
+<h2>
+II.6 LAWS IN DIFFERENT COUNTRIES
+</h2>
+</p>
+
+<p>
+<a name="_Toc415913697">
+<b><i>
+II.6.1 Introduction
+</i></b></a>
+</p>
+
+<p>Cryptography is a sensitive subject because not
+all countries have common laws about it. Some countries ban its use or limit it
+and others let everybody use it.</p>
+
+<p>
+<a name="_Toc415913698">
+<b><i>
+II.6.2 The United States
+</i></b></a>
+</p>
+
+<p>In the United States, everybody can use strong
+cryptography. This means that even the American government and the army are
+&quot;not supposed&quot; to be able to break crypted messages from American
+citizens. There is, however, a cryptography export restriction; indeed, the
+American government does not allow other countries to use their strong
+cryptography algorithm (e.g. DES with very long keys). This is understandable,
+in case of war, the United States want to be able to decrypt any crypted
+messages from a hypothetical enemy country. However, more and more American
+civil rights are in danger, because the NSA (National Security Agency) keeps
+asking the federal government to declare cryptography illegal for public use
+because of its importance to the national security. In addition, the American
+government wants to have the power to break any crypted messages even those
+from fellow Americans, therefore, restricting its use.</p>
+
+<p>
+<a name="_Toc415913699">
+<b><i>
+II.6.3 France</span>
+</i></b></a>
+</p>
+
+<p>In France it is even worse, French citizens
+cannot use strong cryptography because it is illegal and considered to be a
+&quot;Second class&quot; Weapon!</p>
+
+<p>The French government wants to be able to read
+any electronic conversation made by French citizens, in other words, privacy on
+the Internet is non-existent for the French…</p>
+
+<p>The current laws only allow the use of strong
+cryptography if you give your private key to the government to let them decrypt
+your messages and only if the cryptography algorithm you want to use is one of
+those that are authorised.</p>
+
+<p>To get authorisation to use a new cryptography
+application or algorithm you have to make a request to the SCSSI (Service
+Central de la Securite des Systemes d'Information) which is a national French
+security agency, and depends to the first French minister himself. </p>
+
+<p>Laws about cryptography seems likely to change
+soon on France allowing French citizens to use any key length. The laws exists
+but still remains to be &quot;activated&quot;. Things should change in 2002,
+wait and see!</p>
+
+<p>
+<a name="_Toc415913700">
+<b><i>
+
+II.6.4 The United Kingdom
+</i></b></a>
+</p>
+
+<p>In United Kingdom, the use of cryptography is
+free, i.e., there are no limitations to use any kind of cryptography algorithm
+within the country. However you need to get an authorisation to export
+encrypted data. This could be why, more foreign people are coming to work in
+this country to do what they cannot do in their own country.</p>
+
+<p>
+<a name="_Toc415913701">
+<b><i>
+II.6.5 Conclusion
+</i></b>
+</a>
+</p>
+
+<p>These 3 countries show how cryptography laws
+differ in each country. These laws are changing because governments are under
+pressure. For example, with the Internet, electronic business is more important
+everyday. Some people say this is bad for the &quot;Internet way of
+thinking&quot; i.e., free for everybody. However, people should be aware that
+the more electronic business there is on the Internet then the more strong
+cryptography algorithms will be used. This in turn, therefore, is good for data
+security in general. Because privacy is needed to buy any kind of product on
+the Internet, customers want to be sure their credit cards numbers are going to
+be secure. More and more companies ask governments to allow them to offer a
+high level of privacy to their customers. It seems that governments listen to
+companies more than the public, especially if these companies are big…</p>
+
+<p>
+<a name="_Toc415913702">
+<h2>
+II.7 CONCLUSION
+</h2>
+</p>
+
+<p>Privacy is something essential in computing, therefore so is cryptography.</p>
+
+<p>It is a difficult subject to understand as it is quite new for the public
+and its use could be dangerous. This is why cryptography is so interesting, and
+why more people start studying it every day.</p>
+
+<p>The different government attitudes in different countries towards
+cryptography could be worrying for their citizens regarding their civil rights.
+People do not want the government to listen to their phone calls, so why should
+they agree to let them to listen to their electronic conversations by not
+allowing cryptography?</p>
+
+<p>In fact to be able to see how important cryptography is in computing we need
+to look at the computer's increasing importance in our day to day lives. </p>
+
+<p>There are three important things to remember about using cryptography:</p>
+
+ <li>Even if the cryptography
+     used is very powerful if to crypt clear text, a weak key is used (e.g., a
+     password with only one or two letters), the cipher text generated will be
+     easy to break, so the key has to be chosen carefully. </li>
+ <li>We can judge the quality
+     of a cryptography algorithm in function of the data's life span that is
+     going to be crypted. This means that if you are sure that the cipher text
+     needs X years to be decrypted without the original password and the data
+     that has been crypted will be useless in X - 1 years, the algorithm is
+     powerful enough. This is because when the intruder decrypts the cipher
+     text, it will be useless as it will be one year out of the date. Indeed,
+     in the case of an intruder: intercepting a cipher text is possible,
+     however, finding the password is much more difficult! </li>
+ <li>It is forbidden in some
+     countries, and could be dangerous because computers are used more and more
+     by the army, and those that control privacy, control secret data.</li>
+
+
+<br><br><br><br>
+
+
+</html>

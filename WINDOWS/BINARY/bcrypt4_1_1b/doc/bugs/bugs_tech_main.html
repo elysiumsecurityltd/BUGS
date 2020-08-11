@@ -1,0 +1,1799 @@
+
+<html>
+<head>
+<title>BUGS DYNAMIC CRYPTOGRAPHY ALGORITHM</title>
+</head>
+<a name="_TITTLE"></a>
+<p>
+<b>
+Sylvain MARTINEZ
+<br>
+<br>
+<a href="mailto:martinez@elysiumsecurity.com"> martinez@elysiumsecurity.com </a><br>
+
+<br>
+
+Document Version 4.0b (19/11/2000)<br>
+
+Document based on my UK BSc Project in Computer Science at TEESSIDE in 1998
+<br>
+<br>
+<p> 
+<B>
+<H1>
+<center>
+BUGS DYNAMIC CRYPTOGRAPHY ALGORITHM <br>
+TECHNICAL DOCUMENTATION <br>
+</center>
+</H1>
+</p>
+<br>
+WARNING: Please note this documentation may be out of date, a newer documentation has since been written (2009) and is available on the project main website: 
+<br><a href="http://www.elysiumsecurity.com"> http://www.elysiumsecurity.com </a></b>
+</b>
+<br><br>
+<hr>
+<br>
+
+<p>
+<a name=ABSTRACT>
+<h2>
+ABSTRACT
+</h2>
+ </a>
+</p>
+
+
+This document is part of the BUGS Cryptography project documentation.
+It is based on the report of my final year project in Computer Science at the
+University of TEESSIDE (UK) which consisted of finding information a
+bout
+cryptography, creating my own cryptography algorithm and creating a Windows 95
+cryptography application.<br>
+<br>
+This project started as a personal project back in 1995, became my Bsc
+project in 1998. In 2000, I have created a new algorithm based on the original one.
+BUGS is now a personal project again.
+<br>
+Each chapter's contents is divided into several parts which should help the
+reader to easily find what he is looking for. Most of the chapters and sections
+have an introduction to help their understanding and to give a quick overview
+of their content.
+<br><br>
+As a background in cryptography is needed to evaluate the work done, the
+<a href="bugs_intro.html"> introduction to cryptography document</a> should help the reader to appreciate the work done
+in this BUGS cryptography project.
+<br>The reader does not require any special computer skills to understand this
+report, but a previous knowledge of computer programming would be helpful.
+<br>
+<br>
+Finally, a lot of people asked me: "Why creating another Symetric Cryptography Algorithm" especially
+since AES is now available. This project is an amateur one, it is Open Source, free, for developpers and
+it is not just a cryptography library but also a suit of cryptography softwares. I do not pretend to
+have created something better than DES, AES, nor whatever_ES but just something I hope is secure enough to
+protect personal data. The security level of this algorithm is currently being tested on the Internet,
+and the feedback is very good so far.
+<br><br>
+<hr size=2 width="75%" align=center>
+
+
+<p>
+<a name=HISTORY>
+<h2>
+DOCUMENT HISTORY
+</h2>
+ </a>
+</p>
+<li> V 4.0: Update of the documentation with the new features and contest of BUGS v4.0.0</li>
+<br><br>
+<li> V 3.0: This version corrects many grammar mistakes and there is more information about how the algorithm works. References Links have been updated</li>
+<br><br>
+<hr size=2 width="75%" align=center>
+
+<p>
+<a name=THANKS>
+<b>
+<h2>
+ACKNOWLEDGMENTS
+</h2>
+</b>
+</a>
+
+<p>I would like to thanks Trevor Tippins and Simon Huot who highlighted many weaknesses in my
+previous algorithm and then pushed me to improve it. I would especially like to
+thank Joanne ELLIS who corrected the first version of this report in 1998. I
+would like to thanks the University of TEESSIDE to let me do the previous
+version of this algorithm as my Bsc project. The GNU, Linux and KDE team who
+provide a lot of free development software. All the people around the world
+who tested my applications and sent me feedback emails. My parents who support
+me in my choices. My Brother Florent for the different BUGS logos. Finally my 
+other brother Thierry Martinez, 16 years old, who pushed me to get into the cryptography world
+in 1995 by asking a simple question: "Do you cryptography is something difficult ?" and always
+pushed me to do my best by being unusually good at computing at his age.</p>
+<br>
+<hr size=2 width="75%" align=center>
+<br>
+<p>
+
+<p><a name="_Toc415913704">
+</a>
+<h1><center>
+CHAPTER I<br>
+- BUGS PROJECT -
+</center>
+</h1>
+</p>
+
+
+
+<p><a name="_Toc415913705">
+<h2>
+I.1 INTRODUCTION
+</h2>
+</a>
+</p>
+
+<p>
+The object of this project is to make a free and
+easy to use cryptography algorithm.  This is to give programmers an easy way 
+to use strong cryptography functions/library in their own application.
+It should also be designed in a portability focus, in other words, it should compile
+on every kind of hardwareor operating system.<br>
+The strength of the algorithm has to meet high standard and even if I haven't
+the pretension of creating something as strong as a military algorithm, it
+should be really near this &quot;security level&quot;.<br>
+<br>
+The keywords are then:<br>
+Security, Efficiency, Portability, Open Source and Easy. 
+</p>
+
+<p>
+This project has been one of my
+first interests since 1995. Even if I stopped working on it for some times (never
+more than 6 months in the last 5 years) I have been working constantly on it. <br>
+This is really time and "gray matter" consuming ! With the latest version, in
+2000, I have been working on it for more than 10 months, every day. I am not
+sure I'll do it again, not soon anyway! I think this project has reached its
+maturity, even if I am sure I will carry on debugging it and maybe including
+new small features, I don't think I am going to re-write a brand new algorithm.
+Unless someone &quot;easily&quot; breaks this algorithm.<br>
+<br>
+This project is not the end of my work in computer security, I have done it to
+open doors.<br>
+This is only the beginning... 
+</p>
+
+<p>
+<a name="_Toc415913706"></a>
+<h2>
+I.2PROJECT ANALYSIS
+</h2>
+</p>
+
+<p>
+<b><i>
+<a name="_Toc415913707">
+I.2.1 History</a>
+</i></b></p>
+
+<p>
+This project is
+especially interesting for me because cryptography has been one of my main
+interests since 1995. In 1996, at the French University I started to get
+information and make a cryptography algorithm but my professors stopped me.
+This is because French cryptography laws are really strict and everybody is
+afraid about a science considered like a second-class weapon by the government!
+</p>
+
+<p>
+When I came to England for my studies, I had the chance to take this project as my
+final year BSc project. This has been a success. Despite the fact that because
+of it I didn't really spend much times on my other studies it was worth it! The
+last month exams were a bit of a nightmare, but somehow, I managed to get
+through it!
+ </p>
+
+<p>I am nowworking full-time, and from November 1999 to September 2000 (10 months)
+I have been working every night on
+this new algorithm. It has been really tiring and stressful but I knew I had
+to do it because this new version was much better than the old one. I think
+this new algorithm can compete with many existing ones, and even if it is maybe
+not the strongest one (time will tell us), it has some interesting new features
+that no other one has or at least not all of them in a single algorithm: <br>
+- Dynamic algorithm <br>
+- Multiplateform <br>
+- Option to make it architecture dependant (if you use 16, 32, 64 or 128 bits
+integer) <br>
+- 2 different way to make the algorithm works: direct access to the disk (slow
+but not a lot of memory needed) or memory cache access (quick but needs loads
+of memory when crypting very big files) <br>
+- Strong key generator 
+
+</p>
+
+<p>This project has also been really useful to me about: learning different languages,
+using different operating systems. It was done in a really professional way
+because of the fact that the programming was very strict and the graphical user
+interface was designed over a long period of time. This included looking at a
+lot of professional project specifications from books, in the LINUX operating
+system and in the GNU association which both provide very important project
+source codes and specifications.
+</p>
+
+<p>
+<b><i>
+<a name="_Toc415913708">
+I.2.2 The analysis
+</i></b></p>
+
+<p>I decided to make an algorithm on my own. This is
+why I spent a lot of time thinking about the problems of making a secure
+algorithm. This was very useful, because understanding the existing algorithms
+were made easier after. Actually I found by myself most of the existing
+principles, and that is the best way to understand them. Of course, I did not
+find a lot of the complex mathematical formulas, but most of the principal
+cryptography rules and functions.</p>
+
+<p>People could argue that there is no point of
+&quot;reinventing the wheel&quot; and that one person alone can't compete with
+a team of professional working full time on a cryptography algorithm. I agree
+with that. However, this project just started as a hobby. Because now the algorithm
+I've created seems to be better than first expected 5 years ago I have decided
+to put more effort into it. Yes, it is like a challenge for me. I want to
+create a strong, free and easy to use cryptography library. </p>
+
+<p>I searched for some information about cryptography
+and read a lot of documentation. I tried to understand how the main cryptography
+algorithms worked and I looked for all the problems that they had. Nearly all
+the information has been found in the excellent book of Bruce Schneier [7]
+which is the reference book for everybody interested in cryptography. I also
+found a lot of documentation on the Internet. </p>
+
+<p >When I made my algorithm I always tried to avoid
+the weak points that could break its security by trying to break all the new
+functions that were implemented. Therefore I started to imagine a perfect
+algorithm without thinking of the programming problems. When I finished the
+algorithm specifications, I implemented it in a C application on a LINUX
+operating system, I then spoke to a lot of people about this algorithm and kept
+improving it over many months. For the previous algorithm version, Dr Oswald from
+the university of Teesside gave me a lot of ideas for improvement. For the new
+version, Trevor Tippins gave me some good reasons to improve the existing algorithm
+</p>
+
+<p>I chose to first do a LINUX C application because
+it was the language I was the most familiar with. Even if I first did a Windows
+version using DELPHI, I am now using C++ Builder.</p>
+
+<p>The advantages of this solution are enormous:</p>
+
+<p>
+The main part is in C. As this language is the most
+commonly used in computing, I can compile my application on all existing
+operating systems, thus on any kind of computer. </p>
+
+<p>
+I did the main part of it on LINUX in C, I did a
+Windows 9X/2000 adaptation by using C++ Builder. Therefore I had to be able to
+use all these different environments. </p>
+
+<p>
+As my application can be used on different operating
+systems, I can really be sure that there is no problem, indeed, some errors may
+not be detected on some operating systems that are not strict (e.g. sharing the
+memory) or with some compilers that are less strict than others. </p>
+
+<p>Because the application should run on different
+operating systems, the source code has been made as generic as possible. This
+means that it should not need any 
+modifications to be compiled on any operating
+system. The reason for this choice is easier and quicker application
+maintenance. Thus the main work could be on the content of the algorithm and
+not on the portability part.</p>
+
+<p>I have also tried to look at everything that has
+been done in cryptography and all the available applications. I realised that
+there were not a lot of applications and none of them were easy to use or were
+too old to be really secure. The project application therefore became an
+application that could be very useful for everybody who wanted to use
+cryptography. I have done my specifications by thinking about all a users
+possible requirements, I asked a lot of people about what they would like to
+find in this kind of application. I also looked at all the enquiries about this
+subject on the Internet.</p>
+
+<p>
+<a name="_Toc415913709">
+<b><i>
+I.2.3 Work done
+</i></b></a>
+</p>
+
+<p>I have made my own cryptography algorithm. I found some logical operations that
+are not used in other algorithms. The algorithm is dynamic, i.e. the user can change
+the way it behaves just by changing some parameters.</p>
+
+<p>The C implementation of this algorithm has been
+very difficult especially because I always had to think about using my C code on
+another machine. This is why I had to respect all the specifications of the
+ANSI C [8], which is the universal C standard. I also created my algorithm in a
+C library rather than a whole C application and I have done all the sample
+applications separately. As a result to this it has been easier to adapt my
+algorithm to other systems because the main part of it, aka the C library, was
+the same. I have created a full package that works on all UNIX systems, but
+there is no graphical user interface for this version yet. The library itself
+contains about 7600 lines of C code, which is quite a lot for a single
+algorithm. The Unix package consists of a password generator with a password
+database management, 
+a login sample application, and a crypt file application.
+I have done two different algorithms for the last application; the new one uses
+random numbers to crypt and is therefore more powerful. My application could
+easily replace the Unix standard login and is much more powerful, I wrote a
+help file for each function (see <a href="dev_english.txt"><b>Appendix B,
+Developer Help Functions</b></a>) and explained in detail all my algorithm
+specifications. The more people that understand it the more sure I will be that
+my algorithm is powerful.</p>
+
+<p>One of the most difficult part of the new
+algorithm was to handle 2 different ways the algorithm could work:<br>
+- Using direct disk access with a small memory buffer:<br>
+This is useful if you want to crypt really big files and haven't got a lot of
+memory.<br>
+- Using memory buffer only:<br>
+You load the whole file into memory. This provides a really fast crypting rate
+but you could run out of memory if you crypt really big files.<br>
+<br>
+I could only have done the memory method as if you are going to crypt a 1 Gig
+file you must have a really powerful computer and therefore you could have 1 Gig
+of memory! <br>
+But I was thinking about portability, I will eventually port the application on
+Palm devices, and there isn't a difference between memory/hardisk. <br>
+Also, I wanted to let the user crypt any kind of files even on a really old
+computer. This has been useful as I managed to find a lot of different bugs
+because I had to achieve to same result using 2 different methods. On one hand
+I was using memory arrays with memory access optimisation (such as really large
+integer which allows me to store many characters in one integer) and on the
+other hand a disk block access in a virtual disk array.</p>
+
+<p>Then, I compiled the library on Windows
+9x/2000/NT and created a standard windows application that uses all the
+features contain in this cryptography library. In the previous version I've
+also done an enhanced version using non-standard graphical functions, I have
+decided to drop this enhanced version in the new algorithm. Basically for time
+reason and also because I think other programmers could do it by using my
+cryptography algorithm. The Windows 9x/2000/NT library has been done in a way 
+that any application should be able to access thecryptography functions, 
+it could be DELPHI, VISUAL BASIC, BORLAND C++, WORD,etc. </p>
+
+<p>I had a lot of problem caused by the fact that I
+used 3 different compilers and languages (GCC, Solaris CC, C++ Builder), and 4
+different operating systems (SunOS, Silicon graphics, LINUX, Windows 2K/NT) to do
+the application and the tests.</p>
+
+<p>
+<a name="_Toc415913710">
+<b><i>
+I.2.4 Main problems
+</i></b></a>
+</p>
+
+<p>As the cryptography algorithm source code has been designed to be compile 
+on any kind of operating system without any modification and with any C compiler,
+the programming part has been very difficult: A windows C compiler can use different
+functions than a Unix compiler. The same problem can happen between two Unix C compilers, 
+(e.g., Unix SunOS C compiler and Linux C compiler). This is why some standard functions had
+to be rewritten to be portable on any kind of Operating System. It was maybe more difficult than
+doing just a Windows application, but doing that increased my knowledge in a
+lot of different areas, this was really interesting and exciting, even if it
+was sometimes really tiring! But I am convinced it was worth it.
+</p>
+
+<p>Three main problems have been encountered. First
+it was sometimes difficult to find a solution to all the way the algorithm
+could have been &quot;broken&quot;. For an amount of time spent on security
+improvement part, twice of this time has been spent trying to find a weak
+point, with always the same idea in mind: doing an algorithm as strong and
+secure as it could be. As the algorithm and applications tests will take place
+on the Internet, it was really important to provide a strong algorithm that
+will not be broken in a very short time and could then beyond attack its
+performance.
+</p>
+
+<p>The other main problem was directly dependent of
+the Windows environment, this operating system has the reputation to be full of
+&quot;bugs&quot;, and it is unfortunately true. A lot of time the application
+development has been slown down by an unknown and illogical problem of
+compilation or execution. An extra execution monitor had to be done to identify
+these Windows problems.
+</p>
+
+<p>The last problem was the time, as I am working
+full time and this project is just a &quot;hobby&quot;. Part of that was also the fact
+I decided to have 2 different way of running the algorithm (Disk or Memory access).
+Despite the fact this improve the protability part of the algorithm it has been really 
+time consuming. This allowed me to find and correct a lot of bugs as if 2 implementations
+of the same algorithm are really different and they give the same result you can be pretty certain
+the algorithm is good.</p>
+
+<p>
+<a name="_Toc415913711">
+<h2>
+I.3 ALGORITHM ANALYSIS
+</h2>
+</a>
+</p>
+
+<p>
+<a name="_Toc415913712">
+<b><i>
+I.3.1 Introduction
+</i></b></a>
+</p>
+
+<p>The perfect cryptography algorithm should resists
+to attacks even if the attackers know how it works, so the algorithm should be
+like a one-way function, you can crypt but not decrypt. That could seem useless
+to create a cryptography application if you cannot decrypt your messages after,
+but first we will consider that our application is only used to create cipher
+passwords. A cipher password does not need to be decrypted,
+to know if you typed the right clear password you just have to compare the two
+cipher passwords, the one that has just been generated with the one stored in
+the password database (As explained in <a href="#_Toc415913689"><b>II.4.2 Login
+password</b></a>).</p>
+
+<p>A good cipher password generator is really useful
+and crucial in cryptography because to crypt a file you use cipher passwords
+that are usually called <i>keys</i> in this kind of application. This is why at
+the beginning of this project, the main task was to build a really strong key
+generator. </p>
+
+<p>Another crucial point in cryptography is that the
+keys must not give away any information about how they have been generated. That
+means if you generate a key from the following password &quot;abcd&quot;, if
+your key is &quot;1234&quot; you can first deduce that the password had 4
+letters, and then easily found that 1 = a, 2 = b, etc. So a better key would
+have been something like &quot;*##1g%$6fd&quot; because you cannot deduce the
+length or the nature of the password. A good cryptography algorithm can be
+resumed to the fact that the more possible solutions corresponding to the key
+generated there are, slower will be the analysis and then the way to
+&quot;break&quot; the algorithm. If there is only 100 passwords to try to find
+a key, then a computer can do that really quickly. If there are billions of
+billions possibilities then it will be much more difficult. Indeed, if to
+generate a key a computer needs 1 seconds, to generate 100 keys the computer
+will only need 100 seconds, but if there are billions of billions keys to generate
+the computer will need billions of billions of seconds to do it.</p>
+ 
+<p>
+<a name="_Toc415913713">
+<b><i>
+
+I.3.2 The cryptography algorithm
+</i></b></a>
+</p>
+
+<p>
+<a name="_Toc415913714">
+I.3.2.1 The key generator</a> 
+</p>
+
+<p>The key generator is not based on a
+&quot;static&quot; mathematical function (e.g. k = x + 1), but on the password
+itself. That means the way a key is generated is function of the password used.
+Thanks to that, it is not possible to easily create other mathematical
+functions to decrypt a key (e.g. x = k - 1). The reason why no
+&quot;static&quot; mathematical functions have been used is because many
+existing cryptography algorithm are based on mathematics (e.g. RSA with
+factorial) and then create an algorithm based on logic was more original and
+was a different approach of the actual state of cryptography.<br>
+A new feature not present yet in any other cryptography algorithm is that the
+BUGS cryptography algorithm is a dynamic algorithm. This means you can change
+the way the algorithm operates just by changing its parameters.</p>
+
+<p>Even if the same password is used to generate the
+key, the key is always different, like that an attacker cannot constitute a
+&quot;key dictionary&quot; by just generate all the keys possible and then
+compare his dictionary with the key he wants to break. Another important point
+is that the key generated does not give any information about the password
+length.</p>
+
+<p>With the new algorithm you can now even specify
+the key generation's round you want to use. With a higher round the
+algorithm will operate many more operations. The BUGS v 4.0.0 introduces a 
+dynamic key poll giving dependacy to the previous key when a new key is 
+generated. </p>
+
+<p>
+<a name="_Toc415913715">
+I.3.2.2 Crypt a file
+</a>
+</p>
+
+<p>To crypt a file, We've got different powerslevels: <br>
+<br>
+<b>- Power 0: Seed the file (one pad seed)<br>
+</b>We use a &quot;mask&quot; that will be added to the file by an EXCLUSIIE OR
+(XOR), it is a binary operation that respect the following rules 1 XOR 0 = 1, 1
+XOR 1 = 0 and 0 XOR 0 = 0. The reason of using this binary operation is because
+if you apply the mask again, in fact y
+ou remove it, <a href="#_3.1"><b>Figure
+3.1 </b></a>shows this process. <br>
+<br>
+<b>- Power 1: Seed the file using a random number<br>
+</b>This is really similar to the previous power level but here I will use what
+I called a &quot;Random method&quot;, I am going to use a random number
+when I create a &quot;mask&quot;, this random number will then be crypted and
+inserted in a pseudo random position in the cipher text. This is a better way
+of crypting as if you crypt the same text with the same password, the cipher
+text will always be different.<br>
+<br>
+<b>- Power 2: Shuffle<br>
+</b>I take the cipher text and mix 2 pseudo random file's blocks together,
+store this &quot;mask&quot; and use it by doing a XOR with another pseudo
+random file's block. When a block is crypted it cannot be used to generate a
+&quot;mask&quot;. I make sure that 2 same blocks won't be use more than once to
+generate a &quot;mask&quot; and that all the file's block will be crypted this
+way, except f
+or 2 blocks, as when I mix 2 blocks I don't use the mask generated
+to crypt one of the block used. This is why the last 2 blocks have to be
+crypted by only doing a seed. <br>
+I guess this is the weak point of this method, an attacker should then try to
+find these last 2 blocks used to create a &quot;mask&quot;. But they would have
+to crack the one pad seed and even with the 2 clear text blocks the attacker
+wouldn't know which logical operation has been used to generate the mask and
+where it has been used. <br>
+To make this method efficient, at least 2/3 of the file should have a mask
+added to it. <br>
+<br>
+<b>- Power 3: Shuffle and seed <br>
+</b>Regarding the potential last security issue, there is this power level.
+Because here decrypting the last 2 blocks used to generate the mask would be
+much more difficult as a 2 pad seed has been used! <br>
+<br>
+<b>- Power 4: Shuffle and Random seed <br>
+</b>This is the most powerful level, using random number to generate the seed
+and
+ doing a shuffle. This is the one used by default <br>
+<br>
+On the top of that, the user can dynamically configure the way the algorithm
+operates by using 2 parameters: <br>
+<br>
+<b>- Crypt's block:<br>
+</b>You can specify the length of the block you want to use to crypt the file.
+This means that if you use the Power level 4 with a Crypt's block equal to 128
+then the algorithm will work with the first 128 bytes of the file, seed and
+shuffle it, then starts again with the next 128 bytes.<br>
+If you are not using a custom crypt's block you crypt the file as only one
+block.<br>
+<br>
+This is maybe confusing (as well as my English) but this is really powerful,
+indeed:<br>
+For example, when I seed a file using a 512 bits key length I take 512 bits
+block at a pseudo random position within in the whole file. If I use a custom
+crypt's block then the algorithm will work only within the size of the custom
+crypt's block and then start again with the next custom crypt's block. This
+to
+tally change the algorithm is operating! <br>
+The only restriction to this is that the crypt's block has to be at least as
+big as the key length being used to crypt the file. <br>
+<br>
+<b>- Shuffle's block:<br>
+</b>When doing a shuffle, by default the length of the block used to generate a
+mask is the length of the type of int you are using (called TYPE_INT), which is
+4 bytes on a Linux PC system. You can change this to whatever length you want
+as long as it is a multiple of TYPE_INT.<br>
+Again, by changing this parameter you change the way the algorithm will work.</p>
+
+<p><br>
+<b>With BUGS, To crack a cipher text, not only you need to know which
+cryptography algorithm someone have been using but you also need to know which
+method has been used (power level) and what was the value of the parameters
+(default or custom crypt and shuffle's blocks.) 
+</b>
+</p>
+
+<p>
+<a name="_3.1">
+</a>
+<img border=0 src="images/3_1.gif"></p>
+
+<p><i>Figure 3.1 EXCLUSIVE OR operation.
+</i></p>
+
+<p>
+<a name="_Toc415913716">
+<b><i>
+I.3.3 Conclusion
+</i></b></a>
+</p>
+
+<p>This cryptography algorithm has been created with
+gradual goals, the first goal was to generate a key from a password, i.e., to
+crypt a small string length of text. When this was done and its security
+tested, a way to use this function to crypt a file, i.e., really long text, was
+found by using of a seed and a shuffle function. Then I have introduced the
+dynamical options of the algorithm (by allowing the use of parameters).
+Choosing to use gradual goals was very useful, because in this way each part of
+the algorithm could be studied and improved. When you have to resolve a really
+difficult problem, it is better to split it up and then find a solution as it
+makes it easier to understand.</p>
+
+<p>
+<a name="_Toc415913717">
+<h2>
+I.4 ALGORITHM CONCEPTION
+</h2>
+</a>
+</p>
+
+<p>
+<a name="_Toc415913718">
+<b><i>
+I.4.1 Introduction
+</i></b></a>
+</p>
+
+<p>The algorithm created for this project is called <b>BUGS</b>
+for <b>B</b>ig and <b>U</b>seful <b>G</b>reat <b>S</b>ecurity, it is a private
+key block cipher algorithm. This algorithm is composed of a key generator that
+is used in the crypt file function. The algorithm has been created in the C
+language, first on the Linux operating system. It is a library, this means that
+any application can access the cryptography functions. This part of the report
+is the most difficult to understand. This is why the explanations are not
+deeply detailed. For more detailed explanations please look at the source code
+of the BUGS library.</p>
+
+<p>
+<a name="_Toc415913719">
+<b><i>
+I.4.2 Key generator
+</i></b></a>
+</p>
+
+<p>The key lengths that are generated are powers of
+two (e.g. 2^x, 128 bits, 256, 512, 1024, etc). To generate a key there are two different
+methods: randomly or pseudo-randomly. For the random method, 16 random
+characters are generated and stored in the memory. For the pseudo-random
+method, the user is asked to type some characters that are then stored in the
+memory, the maximum number of characters that can be entered is 16. 16
+characters correspond to a key length of 128 bits, this is because one
+character is represented by 8 bits on a computer, therefore 16 characters
+represent 128 bits (16 * 8 = 128), 32 characters represent 256 bits (32 * 8 =
+256) and so on. Then several functions are used to generate a key, using these
+characters which are stored in the memory like a password, this string of
+characters is called: &quot;pass_clear&quot;.<br>
+The number of different combinations is higher with the Random method (2**128)
+than with the Pseudo-Random method (72**16 i.e. approximately 2**99). This is
+because the user has to type some characters and there are only around 72
+symbols readily available on a standard keyboard. If only unshifted alphanumeric
+is used then the round falls to around 2**83 combinations. </p>
+
+<p>
+<a name="_Toc415913720">
+I.4.2.1 Test length function</a>
+</p>
+
+<p>It is important that the key's length is always
+the same, so if the length of the &quot;pass_clear&quot; string is inferior to
+the key's length, some characters are then added to the string. The number of
+characters the user has to type must be at least half the number of characters
+in the key. Each new added characters is the result of an AND logical operation
+between two characters randomly picked up in the &quot;pass_clear&quot; string
+of characters. Now, if the key to be generated is 128 bits (which correspond to
+16 characters) the new &quot;pass_clear&quot; length is 16 characters.</p>
+
+<p>When generating a key of more than 128 bits,
+first a 128 bit key length is generated and used to generate a 256 bit key
+length, and so on. This is possible because the first key has got the minimum
+number of characters required to generate the following key (128 bits = 16
+characters, 256 bits = 32 characters, 512 bits = 64 characters, etc). The key
+gen
+erated then becomes the password for the following key. Illustrated by <a
+href="#_3.2"><b>Figure 3.2,</b></a> the different steps during a 512 bits key
+length generation are: </p>
+
+  <li>1- The user types 16 characters as a password.</li>
+  <li>2- If less than 16 characters are typed, some new characters are generated to reach the 16
+      characters needed.</li>
+  <li>3- A key (A1) of 128 bits is generated from the password typed at the step 1.</li>
+  <li>4- The key (A1) is used to generate another key.</li>
+  <li>5- The key (A2) of 256 bits is then generated from the Key (A1).</li>
+  <li>6- Because the key (A1) is twice inferior to the key (A2), the same process
+      used at the step 2 has to be done, but this time, we check if there are at least 32
+      characters (256 bits) in (A1).</li>
+  <li>7- The key (A2) is used to generate another key.</li>
+  <li>8- We repeat the same process that happenned at the step 6 but this time with (A2).
+</li>
+  <li>9- The final key (A3) is a 512 key length.</li>
+
+<p>
+<a name="_3.2">
+</a>
+<img border=0 src="images/3_2.gif"></p>
+
+<p><i>Figure 3.2, Long key generation process</i>. </p>
+
+<p>
+<a name="_Toc415913721">
+I.4.2.2 Transcription function
+</a>
+</p>
+
+<p>The string of character &quot;pass_clear&quot; is
+converted into a string of numbers called &quot;pass_code&quot;, these numbers
+are the ASCII code of each character contained in the &quot;pass_clear&quot;
+string. </p>
+
+<p>
+<a name="_Toc415913722">
+I.4.2.3 Additional function
+</a>
+</p>
+
+<p>It is better not to directly manipulate the ASCII
+code contained in the &quot;pass_code&quot; string. This is why a number will
+be added to each number contained in this string by an Exclusive OR operation.
+This number is generated in function of the password itself. To make it safer,
+each time the number is added it is different I do this by using a circular bit
+shifting. </p>
+
+<p>
+<a name="_Toc415913723">
+I.4.2.4 Swapping function
+</a>
+</p>
+
+<p>This is the main part of the algorithm, all the
+numbers contained in the &quot;pass_code&quot; string are considered to be only
+one long string of bits. First, the bits are swapped with each other, each swap
+takes place between two bits that have a distance of X bits. 
+<br>
+The cipher password is a long string of integer,
+each integer of this string will be assigned to X. Because while doing this bit swapping
+processs the cipher password will be consistantely changing so will the string of integer
+and therefore the value of X. X should never have the same value.
+<br>
+The swap starts from the bit B1 at the position 0 with the bit at the position B1 + X1.
+After, from the bit B2 at the end of the string with the bit at the position B2 - X2.
+This continues with the second bit of the string B3 and the bit B3 + X3, and
+with the next to last bit B4 with the bit B4 - X4,
+and so on. In fact, as shown in <a href="#_3.3"><b>Figure 3.3</b></a>, the
+following rule is respected: </p>
+
+<p>Swap bit I <b>with</b> bit I + X1 </p>
+
+<p>Swap bit 'endofstring' - I <b>with</b> bit
+ 'endofstring' - X2</p>
+
+<p>This starts again with I = I + 1 and a different
+X from the &quot;swap_length&quot; array.</p>
+
+<p><a name="_3.3"></a><img border=0 src="images/3_3.gif"></p>
+
+<p><i>Figure 3.3, Bits swapping process.</i></p>
+
+<p>This is called bilateral bit swapping, with this function all the bits will be
+ swapped around.</p>
+
+<p>The second part of this swapping function is the
+same process, but this time instead of swapping bits around, a pseudo-random
+binary operation, function of the password itself, will be generated. There are 5
+different types of binary operations: Exclusive OR, NAND, NOR, OR, AND. </p>
+
+<p>The way the new algorithm works is that it alternates a swap and a logical
+operation each time.<br>
+The algorithm do this in a loop until all the bits have been used (in a swap or
+a logical operation), you can change the &quot;round&quot; of this loop with a 
+parameter, it is the number of loop you want the algorithm to perform.
+By default it is 2 (which is also the minimum) as with this value we are sure that
+ALL the bits have been used in a swap AND a logical operation.<br>
+By changing the value of the round you are changing the result generated!!
+<br>
+<br>
+Also, in function of the password itself the algorithm will: <br>
+- Starts from the right or the left of the bits string<br>
+- Starts by a swap or a logical operation</p>
+
+<p>When this is finished there is a new
+&quot;pass_code&quot; string, which contain numbers totally different from the
+start. <br>
+Before when I was detecting a 0 in the KEY's array I was replacing it by mixing different
+element of the KEY. Now if one of the element of the KEY's array is equal to 0 I do not
+change it.
+</p>
+
+<p><a name="_Toc415913724">
+I.4.2.5 Coding function
+</a>
+</p>
+
+<p >To make this crypt algorithm more efficient, a
+final part has been created. </p>
+
+<p>A random number is added to each number of the &quot;pass_code&quot; string.
+This random number is initialised at the beginning of the function. Each time
+this random number is added, its bits are shifted to the left, the value of this
+shift is a number generated in function of the character contained in the 
+&quot;pass_clear&quot; string. Therefore,
+each time the random number is added, it is different. Thanks to this random
+number, even if you type the same password to generate the key, you can have
+2^31 different keys (if I use a long random number = 4 bytes = 32 bits).</p>
+
+<p>The random number will be hidden in the key at a
+position that will depend on the cipher string, because when a user types his
+password again we need to recover it. The key generation will then follow the
+same process as the first time it was done. To recover this random number, if
+the password is right the algorithm will know its position. Otherwise, the
+position will be wrong as will the random number used in the coding function
+and the key generated will be different.</p>
+
+<p>You can choose 2 ways to generate a random
+number: using the standard C function or use the ISAAC algorithm created by Bob
+Jenkins. The default RNG is ISAAC. The initial seed will be initialised by the
+/dev/random or /dev/urandom device if present on your system, otherwise it
+would be the result of “time() + clock()”. I am aware that the second method
+hasn’t got a big entropy for the pool of numbers, therefore you can overwrite
+the seed value in your application really easily (for example: after your
+binit() call just add the line: varinit-&gt;SEED = 666, to set the SEED to 666).</p>
+
+<p>
+<a name="_Toc415913725">
+<b><i>
+I.4.3 Crypt file
+</i></b></a>
+</p>
+
+<p>The crypt algorithm provides two methods to crypt files:<br>
+Crypting a file from a password typed by the user that will be
+transformed into a key, or from a key that has already been generated with the
+Key generator function, described in <a href="#_Toc415913719"><b>I.4.2, Key
+generator</b></a>. If you want to use a very long key length, such as 2048
+bits, as it is not really possible to remember a long password, you will have to
+generate a key and store it in a secure area, this key will become your
+password. You can also choose to crypt a file without a password or a key
+generated with the key generator function. You can simply choose an existing
+file, and the key will be some of the data contained in this file (most of the time in the
+middle of the file). This could be really useful if you do not want to store a
+key file.</p>
+
+<p>There are 5 different power levels to crypt a file.</p>
+
+<p>
+<a name="_Toc415913726">
+I.4.3.1 Seed function
+</a>
+</p>
+
+<p>First, a &quot;file array&quot; is defined, if you use a 12
+8 bit key length, the algorithm will calculate how many blocks of
+128 bits there are in the file that is going to be crypted. The &quot;file
+array&quot; will have as many indexes as there are blocks of 128 bits in the
+file. Each block will match one of the indexes of the &quot;file array&quot;.
+There are only two values that can be found in this array, '0' when the block
+has not already been crypted, and '1' when the block has been crypted.
+<br>
+There is a new feature in BUGS 4.0.0:<br>
+Many keys will be generated and stored in a buffer. By default, 16 keys are generated.
+Then the 2 keys will be pseudo randomly selected, mixed together 
+ The key
+will be used as a filter by doing a Exclusive OR between the data contained in
+the file and the key. The position of the block file's data (where the filter
+will be added) is in function of the &quot;pass_clear&quot; string. This is why
+when you crypt a file the blocks sequence and the blocks length that is going
+to be crypted depends on the password used to crypt the file. Each time a
+filter is added, the &quot;file array&quot; is updated to be sure that a filter
+will not be added twice at the same position.</p>
+
+<p>When a filter is used, a new key is generated as
+shown in <a href="#_3.4"><b>Figure 3.4, Crypt file key generation</b></a><b> </b>.
+As a result, the key used as a filter is always different and always in
+function of the previous key that has been generated.</p>
+
+<p>To decrypt a file, because a Exclusive OR has
+been used to crypt the file, you simply crypt the cipher file with the same
+password again to remove the filters. </p>
+
+<p>Something important is that when the keys are
+generated it is not possible to add a random number, as described in
+<a href="#_Toc415913724"><b>I.4.2.5 Coding function</b></a>, because it is not
+possible to find it again, once the key has been added to some data.</p>
+
+<p>It is why with this algorithm, with one password,
+or key, you only have one cipher text.</p>
+
+<p><a name="_3.4"></a><img border=0 src="images/3_4.gif"></p>
+
+<p><i>Figure 3.4, Crypt file key generation.
+</i></p>
+
+<p><a name="_Toc415913727">
+I.4.3.2 Random Seed function
+</p>
+
+<p>The idea was to be able to have more than one cipher
+text when the same clear text was crypted with the same password [9]. This can
+be achieved by using a random number in the key generation process. This algorithm
+is nearly the same as the standard one, but this time ONE random number is
+generated and crypted using the same password used to crypt the clear text.
+It is then inserted in the cipher text, still at a position function of
+the &quot;pass_clear&quot; string. After, this random number is used in the key
+generation. Therefore, with this algorithm for ONE password and ONE clear text
+there are MANY cipher texts.</p>
+
+<p>To decrypt the cipher text, the random number is
+extracted from the cipher text first and the cipher text is crypted again with
+the password typed by the user and this random number. If it is the right
+password, the right random number will be extracted, the right keys will be
+then generated and the algorithm will generate the right clear text.</p>
+
+<p>This algorithm is much stronger than the standard
+one, indeed if someone tries to decrypt a cipher file, he will never be sure
+that he has found the right clear file.</p>
+
+<p><a name="_Toc_bugs1">
+I.4.3.3 Shuffle function
+</a>
+</p>
+
+<p>As for the file_seed function I divide the file
+into blocks (by default block's length = Default integer width = 4 bytes on Linux)<br>
+From the last cipher password generated I am going to extract pseudo-random
+numbers to find 3 files locations: <br>
+- position to crypt (pos_crypt) (I always start with the last block, see below)<br>
+- position A used in the crypting process (posa)<br>
+- position B used in the crypting process (posb)<br>
+<br>
+I take the blocks at the position A and B and I do a logical operation between
+them (in function of the cipher password): OR, NOR, NAND.<br>
+I then add the result (MASK) with an Exclusive OR to the block at the position pos_crypt.<br>
+Then, one of the blocks used to crypt (A or B) will become the new position to crypt.
+The choice between A and B is done by checking if the position that has just been crypted (pos_crypt)
+is an odd number or not. If it is then the new crypt position will be pos A otherwise it
+will be pos B.<br>
+I do this to prevent 2 blocks to be used together more than once to crypt an other block!!
+<br>
+I end up with 2 blocks uncrypted (well, in fact they've been &quot;seeded&quot;
+before!) so I generate 2 new cipher passwords from the one sent as a parameter
+to this function and I add them to the block with an Exclusive OR.<br>
+I also start this function by crypting the last block of the file this is
+because of the way I divide the file into blocks:<br>
+if the key's length is 128 bits and the file's length is 260 bits then I have got
+3 blocks of of 128 bits, but the last block only have 4 bits from the file. If
+I was using this block in the &quot;shuffle&quot; process this would be weak.<br>
+Therefore I don't use it and I crypt it at the start of this function.<br>
+<br>
+The way I decide which block is going to be crypted and which blocks are going
+to be used to generate the MASK is function of the password itself. I use the
+value of the password (A) in a LINEAR FEEDBACK SHIFT REGISTER FUNCTION (LFSR). This
+enables the algorithm to generate many different numbers (B) from (A). An LFSR
+is really useful to generate a sequence of pseudo random numbers that are
+always the same if generated from the same initial number.<br>
+This function has been taken from the excellent book from Bruce Schneier
+Applied cryptography Second Edition. I have just changed it a bit, in order to
+do not initialise the function from a static variable. Instead, I initialise
+the LFSR with the password itself. I also use a different primitive polynomial
+modulo 2 in function of the length of the &quot;shift register&quot; you are
+using (16, 32 or 64 bits).<br>
+<br>
+This part is really important as the file is then crypted with its own content.
+<br>
+<br>
+If I use the seed and shuffle function to crypt a file, to decrypt I first need
+to &quot;unshuffle&quot; and then &quot;unseed&quot; the crypted file. </p>
+
+<p><a name="_Toc_bugs2">
+I.4.3.4 UNShuffle function
+</a>
+</p>
+I first do the same think as in the file shuffle function except that I do not
+make any changes on the file at first. I store the different crypt positions
+and blocks that are used to create the masks.<br>
+<br>
+I then have 3 arrays:<br>
+position[] = position of the block which will be crypted<br>
+crypta[], cryptb[] = position of the 2 blocks used to create the mask<br>
+<br>
+For example:<br>
+position[5] = 500<br>
+crypta[5] = 232<br>
+cryptb[5] = 1300<br>
+<br>
+This mean that the 6th block to be crypted was the block number 500 using the blocks
+232 and 1300 to generate the mask !<br>
+When I have filled up these 3 arrays, I then decrypt the last 2 blocks and I
+start from the end of the array to the beginning to un-shuffle the file . <br>
+You can compare that to a &quot;cards castle&quot; once you've done your castle
+if you want to remove the cards without breaking the castle you need to take
+out the last card (on the top) and then the next one, etc in a reverse order.</p>
+
+<p><a name="_dynamic_option">
+I.4.3.5 Dynamic Variables
+</a>
+</p>
+This is one of the main new feature of BUGS 4.0.0 <br>
+The following variables:<br>
+<li> ROUND </li>
+<li> BLOCK SHUFFLE</li>
+<li> BUFFER KEY (used in the seed function, 
+and tells the algorithm how many keys must be stored in the buffer)</li>
+<li> MODULO SWAP (which is used in the swap functions and tells the
+ algorithm how big or small can the bits swap process be</li>
+<br>
+<br>
+These variables can be set to be dynamic or not (default = yes).<br>
+If set to dynamic, the algorithm will change their value in fonction of the 
+password entered. The minimum value is the default value entered
+for these parameters, and the maximum is double the default value.<br>
+for example:<br>
+<br>
+if ROUND = 2, then with the dynamic option ROUND could be a value 
+between 2 and 4. If ROUND was equal to 10, then it could be a 
+value between 10 and 20.
+<br>
+<br>
+The MODULO SWAP changes at each round.<br>
+All the others Dynamic variables changes at each block you crypt.<br>
+By default you crypt a file as one big block, so these values will
+change only once.<br>
+<br>
+
+<p><a name="_bssl_option">
+I.4.3.6 BSSL
+</a>
+</p>
+This is a new feature in BUGS 4.0.0 and stands for:<br>
+<b>B</b>ugs <b>S</b>ecurity <b>S</b>andard <b>L</b>evel
+<br>
+The BSSL lets you choose easily different preset values for all
+the different parameters in BUGS.
+<br>
+<br>
+<a href="bssl.txt"> Click here to see the current BSSL available </a> 
+<br>
+<br>
+<br>
+<p><a name="_Toc415913728">
+<b><i>
+I.4.4 Conclusion
+</i></b></a>
+</p>
+
+<p>The main problem in this algorithm conception was
+that it was necessary to always have in mind the following words: security,
+efficiency and portability. Everything has been done to respect these keywords, the
+source code is well documented and well formatted, and should therefore be easy
+to understand.</p>
+
+<p>To conclude, here is a summary of the algorithm
+specifications:</p>
+
+<p>- Private key algorithm.</p>
+
+<p>- The source code can be public without making
+the algorithm weak.</p>
+
+<p>- Dynamic Algorithm</p>
+
+<p>- Pseudo Random numbers generated using a Linear
+Feedback Shift Register and ISAAC algorithm</p>
+
+<p>- Direct disk access or Memory buffer method in order to run on low spec computer and Palm devices</p>
+
+<p>- Stream encryption option </p>
+
+<p>- Block encryption option </p>
+
+<p>- Key generator: Bits manipulations, bilateral
+bits swapping and logical bits operations, random generator.</p>
+
+<p>- Crypt file (using the key generator): Variable
+length cipher block algorithm.</p>
+
+<p>- 5 Power levels: Seed, Random Seed,
+Shuffle, Seed + Shuffle, Random Seed + Shuffle.</p>
+
+<p>- Key length unlimited (as big as your integer
+type can take).</p>
+
+<p><a name="_Toc415913729">
+<h2>
+I.5 APPLICATIONS
+</h2>
+</a>
+</p>
+
+
+<p>
+<a name="_Toc415913730">
+<b><i>
+
+I.5.1 Introduction
+</i></b></a>
+</p>
+
+<p>To demonstrate the use of the project
+cryptography algorithm, some applications have been created. These applications
+except for the crypt's file ones should be taken as example only. The reason
+for this is that I did not test them as much as the crypt's file applications.
+</p>
+
+<p><a name="_Toc415913731">
+<b><i>
+I.5.2 UNIX Applications design
+</i></b></a>
+</p>
+
+<p>The applications using the cryptography algorithm
+created for the project were first created for UNIX (such as Linux, SunOS,
+Silicon Graphics, HPUX, etc.). The reasons for this choice were because this
+system is the most used in the computer world. Also, because no graphical user
+interface needed to be created, these applications could be created faster</p>
+
+<p>These applications have been created using the C language.
+They all use a library which contains all the cryptography functions
+created for this project and only consist of a user interface for the use of
+this library. Particular attention has been given to the error check in these
+applications. Even if they are badly used, an understandable error message is displayed.
+There are 6 different applications:</p>
+
+<p>
+<b>Bcrypt</b>: Crypt/Decrypt file application.</p>
+
+<p>This application, which is illustrated by <a
+href="#_3.5"><b>Figure 3.5</b></a>, is used to crypt or decrypt a file. Some
+parameters have to be set by the user which are the password, the file to
+crypt/decrypt, the destination file, the length of the key, the crypting power
+method, the round of the key generator used. The user can even specify a
+custom crypt's block length and a custom shuffle's block length. There is also an interactive
+mode where the application is prompting you for each parameter required. This is a security enhancement
+if you don't want someone doing a 'ps' looking at your parameters</p>
+
+<p>
+<b>Bchat</b>: Secure chat, similar to the 'talk' UNIX
+command.</p>
+
+<p>This application can be used to have a secure
+conversation other a network (Internet for instance). It uses a stream
+encryption method. It is still an early beta version that should be used
+carefully, however it is stable. I may create a better version in the futur.
+This application also offers an interactive mode.
+</p>
+
+<p><b>Bkey</b>: Key generator application.</p>
+
+<p>This application, which is illustrated by <a
+href="#_3.6"><b>Figure 3.6</b></a>, is used to generate a key which will be
+stored in a file. Some parameters have to be set by the user which are the
+password or the random generation flag, the destination file and the key length
+to be generated.</p>
+
+<p><b>Blogin</b>: Login application similar to the
+existing one on the Unix system.</p>
+
+<p>This application, which is illustrated
+ by <a href="#_3.7"><b>Figure 3.7</b></a>, is used when a user wants to log onto the
+system. Parameters must be set by the user such as his password and the
+location of the password database which contains his cipher password.</p>
+
+<p><b>Bpass</b>: Password management application.</p>
+
+<p>This application is quite similar to the Bkey
+application but the key generated is stored into a password database with the
+user login name. Some parameters have to be set by the user which are the user
+name and his new password. If the user already has a cipher password stored
+into the password database, he will have to re-type his old password to be able
+to change it with the new one.</p>
+
+<p><b>Bhide</b>: Hide/Extract engine application.</p>
+
+<p>This application is used to hide a file in
+another file or to extract a previously hidden file. You can choose to hide a
+file at the beginning or at the end of another file. This is a completely
+separate part of the cryptography called steganography. It would have been too
+long to create a strong steganography algorithm so this is why it is only a
+simple algorithm (Added to the beginning or at the end of a file). This part
+was done, because even if the algorithm is simple, it could be useful. This is
+because, with this algorithm, if you hide a file into a picture, video or sound
+file, it becomes invisible. As it is only a small part of this project, it will
+not be developed further.</p>
+
+<p><a name="_3.5"></a><img border=0 src="images/3_5.gif"></p>
+
+<p><i>Figure 3.5, Bcrypt application design.</i></p>
+
+<p><br>
+<br>
+<a name="_3.6"></a><img border=0 src="images/3_6.gif"></p>
+
+<p><i>Figure 3.6, Bkey application design.</i></p>
+
+<p><br>
+<br>
+<a name="_3.7"></a><img border=0 src="images/3_7.gif"></p>
+
+<p><i>Figure 3.7, Blogin application design.</i></p>
+
+<p>These applications are provided with an
+installation utility and a lot of documentation and comments in their source
+code.</p>
+
+<p>The user can have a look at the applications
+source code and modify them if he wants to implement additional functions However,
+a lot of time has been taken over these applications so no changes should be
+needed. <a href="#_3.8"><b>Figure 3.8</b></a> is a screen shot of the Unix
+interface.</p>
+
+<p><a name="_3.8"></a><img border=0 src="images/3_8.gif"></p>
+
+<p><i>Figure 3.8, Screen shot of the Unix
+application interface.</i></p>
+
+<p><a name="_Toc415913732"><b><i>
+I.5.3 WINDOWS 9x/2K/NT Application design
+</i></b></a>
+</p>
+
+<p><a name="_Toc415913733">
+I.5.3.1 Introduction
+</p>
+
+<p>I used in the past &quot;Delphi 3&quot; to
+develop my Windows application, Noe I have decided to create the new
+applications using Borland C++ Builder. </p>
+
+<p><a name="_Toc415913734">
+I.5.3.2 Application design
+</p>
+
+<p>The cryptography library has been compiled on Windows using the Borland C compiler.
+A lot of compatibility options have been respected and only few changes needed to
+be made. Therefore, no problems occurred with the library Windows adaptation.</p>
+
+<p>Although in the Unix version there were 6 different applications created,
+in the Windows version only one application was created containing most of the features 
+provided in the different Unix applications.
+The Windows application uses the library functions by calling them as
+&quot;external functions&quot;. This means it is like if the functions
+contained in the library were part of the application. The difference however
+is that these functions are only loaded onto the computer memory when they are
+needed. </p>
+
+<p>The windows application is multitask. This means
+that even when an action is being performed (crypting, generating a key, etc)
+the user still has access to the other actions provided in the application.</p>
+
+A log file can be generated, while the application is running, and tell you 
+all the different step done by the application. This is useful in order
+to find a &quot;bug&quot; or to check what is has actually been done, <a
+href="#_3.9"><b>Figure 3.9</b></a><b> </b>is a sample of the log that could
+be generated. 
+
+
+<p>The application is divided into 3 different parts:</p>
+
+<p><b>INFORMATION</b>: this part displays all the
+information regarding the application. The action that has been chosen
+(Crypt/decrypt, generate a key, hide/extract data), the key's length, the power
+level used, the minimum and maximum length of the
+password required and whether or not a log file is going to
+be generated. </p>
+
+<p><b>ACTION</b>, illustrated by <a href="#_3.10"><b>Figure
+3.10</b></a>: This is the main part of the application. You can choose the
+action to be done, to crypt or decrypt a file, to generate a key or to hide or
+extract data. Two extra options which are not using the cryptography
+library are also provided. The first one allows the user to display the
+contents of a file, for example a text file. He can then check if a file has
+really been crypted. The user can also display a picture if he wants to check
+if hiding data did not damage or modify a picture. The other choice is a
+small text editor that can be used to quickly and easily create a text file. As
+a result of these options everything is provided in the application. The user
+does not need to use another application to create a text file he wants to
+crypt, to display a picture or to check what the application has done. The
+parameters that have to be set for each action are the same as those used in
+the Unix applications.
+<br>
+From this main part of the  application you can also access the options and information
+panel. </p>
+ </p>
+
+<p><b>LOG</b>: this part gives real time information on
+what the application is doing, and provides useful and understandable error
+information. This way the user is constantly helped to use the application. </p>
+
+<p>The arrangement of the different items on the screen
+have been thought carefully. The information part are
+on the left as the common way to read text is from left to right. The action
+and main part is in the centre, and the log part is on the right. <a
+href="#_3.11"><b>Figure 3.11</b></a> shows the application design.
+Documentation has been created and included in the application package to
+explain how to use this application.</p>
+
+<p ><br>
+<a name="_3.9"></a><img border=0 src="images/3_9.gif"></p>
+
+<p><i>Figure 3.9, Log file sample.</i></p>
+
+<p><br>
+<a name="_3.10"></a><img border=0 src="images/3_10.gif"></p>
+
+<p><i>Figure 3.10, The action design.</i></p>
+
+<p><br>
+<a name="_3.11"></a>
+<img border=0 src="images/3_11.gif"></p>
+
+<p><i>Figure 3.11, The application design.</i></p>
+
+<p><a name="_Toc415913735">
+I.5.3.3 Main problems
+</p>
+
+<p>
+The windows application was quite difficult to create because I never used Borland C++ Builder.
+Even if the code editor is pretty good, the documentation is not. And lot of time has been spent
+on the internet, web site, news group to find answers. In the past, when I was developing the 
+Windows application in Delphi 3 I used some books [10]. However this time I didn't use any as 
+the Internet resources were really good.</p>
+
+<p>
+<a name="_Toc415913736">
+I.5.3.4 Graphical User Interfaces</a>
+</p>
+
+<p>
+For this new version I have only created a standard interface. In the the previous version I 
+also created an "enhanced" version and used a function written by Andreas Heckel found on the
+Internet. This was not really easy to use but provided features like transparent
+and free style windows. To explain how the enhanced version was created would
+take too long and it is only an extra part of this project, it is not
+necessary as I have decided to stop developping it.<br>
+<br>
+</p>
+
+<p><br>
+
+<p><a name="_Toc415913738"><b><i>
+I.5.4 Conclusion
+</i></b></a>
+</p>
+
+<p>
+The standard application available on Windows has been carefully tought and tested, it provides almost all
+the features that can be found in the Unix Package and also fully compatible with the UNIX cryptography library.<br>
+The Windows version was not really my main goal as I am more interested in developping a cryptography algorithm rather
+than a full suit of software. I did it for 2 reasons: to learn windows programmation and to show the public it was 
+easy to use the BUGS library on any kind of OS, Unix, but also Windows.
+</p>
+
+<p><a name="_Toc415913739">
+<H2>
+I.6 TESTS
+</h2>
+</a>
+</p>
+
+<p><a name="_Toc415913740"><b><i>
+I.6.1 Introduction
+</i></b></a>
+</p>
+
+<p>Different steps were undertaken in order to test
+the quality of the algorithm and the applications, personal tests, multiple
+operating system tests, friends' tests and Internet tests. These tests were
+really important to create high quality, professional applications.</p>
+
+<p><b><i>
+<a name="_Toc415913741">
+I.6.2 Personal tests</a> </i></b></p>
+
+<p>First, each new cryptography function implemented
+was tested carefully to try to generate all possible errors, even those
+previously not thought possible. For these tests, the log file that can be
+generated to describe everything done in the algorithm was very useful as it
+was possible to &quot;trace&quot; the running process.</p>
+
+<p><b><i>
+<a name="_Toc415913742">
+I.6.3 Multiple Operating System tests</a>
+</i></b></p>
+
+<p>The
+project applications were tested on many different operating systems (OS):
+Windows 9x, Windows NT, Unix (Linux, HPUX, Silicon Graphics, and Solaris).
+Because each operating system is different (memory management, permission rights,
+variable management, etc) these tests were very important. For example, a
+problem regarding the way the password was stored in the memory happened once.
+No errors were generated when the application was running on Linux,
+but on the Silicon graphics OS an error was generated. This was because on
+Linux the memory management is less strict than on Silicon Graphics (or at least at the time
+on the Linux OS there were not as many users as there were on SGI). Therefore,
+sometimes the application worked fine on the Silicon graphics and Windows but
+not on the SunOS because these first two OS were more compliant in certain
+areas.</p>
+
+<p>These tests were really long and difficult to do
+but also useful to create a really strong and professional application and to
+remove many &quot;bugs&quot;.</p>
+
+<p><b><i>
+<a name="_Toc415913743">
+I.6.4 Friends tests
+</i></b></p>
+
+<p>When the previous step was done, this application
+was tested by a lot of friends. This was useful as it not possible for one
+person to guess everything that a user could do, even the most simple. <br>
+Working in a computer science environment I manged to have this algorithm tested 
+by many professional, most of them only had basic cryptography knowledge but some
+of them were experienced in this field.</p>
+
+<p>
+<b><i>
+<a name="_Toc415913744">
+I.6.5 Internet tests</a>
+ </i></b>
+ </p>
+
+<p>After the previous tests, the quality of the
+algorithm and the different applications were stronger. The tests could then
+take place over the Internet. If a lot of time passed before starting these
+tests on the Internet this was for a good reason. If a lot of bugs were still
+present in the application or in the algorithm conception, this project could
+have then lost credibility and stopped people testing it. On the Internet, it
+is not just 4 or 5 people that could test an application, it could be hundreds.
+This is why a good documentation has been written, the application source code
+modified and checked to respect all the standard rules of programming and
+professional attention has been given to the different packages which were
+going to be publicly available on the internet.</p>
+
+<p>A Web site has been designed and created at where
+a summary of the specification and the different applications can be found
+[11].</p>
+
+<p>When everything was available on the Internet,
+different Internet search engine sites were contacted [12,13,14] and the
+Official BUGS project web site indexed in those Internet search engines.
+This means that each time someone searches for cryptography on the Internet he
+will find the BUGS Web Site.</p>
+
+<p>The applications have also been put on two other
+Internet sites. The first one is the biggest shareware/freeware Internet WEB
+site [15]. The second one is the biggest Unix application FTP site [16,17]. The
+fact that the project applications have been accepted on the FTP site is proof
+of quality as this site is the SUN company Internet site (one of the
+most important computer company). Now, the project applications will be
+available on CD-ROM, indeed, the free operating system LINUX is always
+available on CD-ROM with a copy of the SUN ftp site. Moreover, the SUN ftp site
+is not only located at one place, but thousands of mirrors of it can be found
+all over the Internet. The project applications are stored on the SUN Internet
+site at a location where only two other programs can be found: PGP and MD5
+(which is another cryptography standard, for the Internet). </p>
+
+<p>Also, some emails have been posted on different
+newsgroups and mailing lists. The most important mailing list where information
+has been posted is the cypherpunks mailing list [18], however only the previous version 
+of the algorithm has been announced on this mailing list as it seems this mailing list 
+does not exist anymore. This is a private mailing list where only people with strong 
+knowledge or interest about cryptography are participating.
+The project specifications have also been sent to a French computer
+newspaper which also publishes an electronic version [19]. This electronic version
+consists of a fortnightly review of computer world events sent by email to more than 10 000
+people. In the newspaper fortnight number 102 (26 March 1998) and in the new
+edition number 39 (June 2000), an article about my project was written by a
+journalist. The next day I had 200 visits more to my home page.</p>
+
+<p>On the 19th of October 2000, after 4 months the new algorithm has been published on the internet 
+about 5000 People went to the web site and about 2000 Downloaded the BUGS applications and algorithm.
+[20]. I found some
+interesting addresses from the project applications that have been downloaded :
+navy.mil, .ibm.com, .bt.com, nasa.gov, pentagon, etc. I received 
+many email from all over the workd (German, American, English, French, Russian, Spanish, etc)
+telling me that they were interested in my applications and were testing them.
+Because the project applications are present on famous Internet sites, many
+other people may have taken them but I have no access to these statistics.
+After 4 months, no problems have been found in my applications and nobody has
+yet succeeded in breaking my new cryptography algorithm, the tests continue.</p>
+
+<p>
+<b><i>
+<a name="_contest">
+I.6.6 Cryptography Contest</a>
+ </i></b>
+ </p>
+There are 2 contests about BUGS.<br>
+Each of the contest offers 50 English pounds to the winner.<br>
+<br>
+To test the strenght of this algorithm, I've decided to run a contest.<br>
+Because this is a free software and I created it during my free time,<br>
+I can't offer a lot of money. However I hope that this will push more<br>
+people to try to crack my algorithm.<br>
+<br>
+<br>
+<b>
+As I am very confident about the strengh of the BUGS v4.0.0, 
+I give away much more information for the contest #3. 
+</b>
+<br>
+<br>
+
+Both contests will be running for a year. Here are the information for
+each contest:<br>
+<br>
+<b>
+<li><a href="contest2.txt"> CONTEST #2, Based on BUGSv3.x</a></li>
+<li><a href="contest3.txt"> CONTEST #3, Based on BUGSv4.x</a></li>
+</b>
+<br>
+<br>
+
+
+<hr size=2 width="75%" align=center>
+
+
+<p><a
+name="_Toc415913746"></a>
+<H1>
+<center>
+CHAPTER II
+<br>
+-CONCLUSION-
+</center>
+</H1>
+</p>
+
+<p><a name="_Toc415913747">
+<h2>
+II.1 PROJECT CONCLUSION
+</h2>
+</p>
+
+<p>This project has been really interesting for me
+and I spent a lot of time on it. Seeing now that everything is finished and my
+work starts to be recognised by many people is something fulfilling. I have realised how
+useful the Internet could be for finding information and people who have the
+same interest as you, even in a very restricted area. Moreover this project has
+given me a lot of knowledge and strictness. I feel more confident in my
+computer abilities.</p>
+
+<p>This is the second time that I have started a
+project by thinking that all the specification problems have a solution. I really
+think it is worth it, because you then have to give your best. You also have to
+be careful to not undervalue the difficulty of a project, specify what you want
+to do and know what you can do is something important.</p>
+
+<p>Even if this project is finished, I will continue
+to provide support to the applications and the BUGS algorithm. I have
+realised how much computer security interests me and companies (Hewlett/Packard
+France, Motorola, etc) have already contacted me. This project is therefore a
+springboard for my professional career.</p>
+
+<p><a name="_Toc415913748">
+
+<h2>
+II.2 PERSONAL BENEFITS
+</h2>
+</a>
+</p>
+
+<p><a name="_Toc415913749">
+<b><i>
+II.2.1 The technical skills
+</i></b></a>
+</p>
+
+<p>During this project I became really confident in
+the use of DELPHI 3, C++ Builder and of the language C, as the applications
+that have been created in these languages are quite complex. I have also improved
+my skills in graphical user interface design and am now able to run an important
+project in a Windows environment. Most importantly I have increased my knowledge of
+cryptography (protocols, algorithms, laws, possible applications). It was
+necessary to understand complex mathematical formulas as the mathematical
+aspect was quite difficult. I also had to find a lot of documentation in order
+to understand the cryptography algorithms like DES, RSA and more recently AES.
+However, mathematics is something I need to increase my knowledge in if I want
+to continue in cryptography. As the applications have to work on many different
+operating systems I had to become familiar with them. I have never worked on a Silicon
+Graphics computer before for instance. </p>
+
+<p><a name="_Toc415913750">
+<b><i>
+II.2.2 The personal skills
+</i></b></a>
+</p>
+
+<p>This project really showed me how involved I
+could get in a project that really interested me. I realised that I could get
+maybe too involved with it!</p>
+
+<p>I also realised that cryptography represents
+different way of thinking. Indeed, if you ask someone how he would create a
+cryptography algorithm he may have a totally different approach to the problem
+than someone else. Cryptography allows you to demonstrate your own logical way
+of looking at things. Finally, in this project I learnt to manage a very
+important project, to plan it and respect this plan and to know what I was and
+was not able to do. </p>
+
+<p><a name="_Toc415913751">
+<h2>
+II.3 CONCLUSION
+</h2>
+</a>
+</p>
+
+<p>Since I have started this project, back in 1995,
+a lot of things have changed. This project became a University project and
+since  people found some weaknesses in the original algorithm I have worked again
+really hard to create a new stronger version. This has been my biggest project
+ever, I have been working on it nearly every day for 10 months, for more
+information take a look at the <a href="lib_hist.txt"><b>Appendix C, Library
+History</b></a>.<br>
+<br>
+I don't know if I will work again so hard on this algorithm, I think I have
+made my point: being able to create a strong cryptography library and showing I
+am not too bad at programming. <br>
+<br>
+- I have learnt a lot in this project with all the different OS and programming
+language used <br>
+- I have been stressed in this project when I was not really sleeping for days
+and only thinking about the problems I had to resolve. <br>
+- I have been depressed in this project when after 4 months of hard work there
+were still so much to do, so many problems to resolve, so many think I wanted
+to add, so much more sleep I should take! <br>
+- I have been helped in this project when I received some emails of support
+from the Internet and pushed me to carry on! <br>
+- I have been happy in this project when everything was working fine, as
+expected, when I first snoop a network transmission of bchat, and everything
+was encrypted. Also when I eventually try to use customised crypt's and shuffle
+block and things worked as planned!! <br>
+<br>
+In fact, it's sees I didn't have much of a life for the last 10 months! it was worth
+it, now let's finished this document and take some holidays !<br>
+<br>
+The END. <br>
+Sorry, if you know me well, I should say, to be continued... </p>
+
+
+<hr size=2 width="75%" align=center>
+
+
+<p><a name="_Toc415913752">
+<h1>
+REFERENCES
+</h1>
+</a>
+</p>
+
+<br>
+<br>
+[1] Davies D W , Price W L </p>
+
+<p><i>Security for Computer Networks</i>, John Wiley
+&amp; Sons, 1989 </p>
+
+<p><br>
+[2] - </p>
+
+<p><i>IBM and DES informations</i>, <a
+href="http://www.ibm.com/">http://www.ibm.com</a> </p>
+
+
+<p><br>
+[3] - </p>
+
+<p><i>RSA informations</i>, <a
+href="http://www.rsa.com/">http://www.rsa.com</a> </p>
+
+<p><br>
+[4] Diffie W </p>
+
+<p><i>Contemporary Cryptology: The Science of
+Information Integrity</i>, IEEE Press, 1992 </p>
+
+<p><br>
+[5] Zimmermann P </p>
+
+<p><i>PGP User's Guide</i>, 1992 </p>
+
+<p><br>
+[6] Schneier B </p>
+
+<p><i>Applied Cryptography, Protocols, Algorithms,
+and Source Code in C first edition</i>, John Wiley &amp; Sons, 1994, 5-8 </p>
+
+<p><br>
+[7] Schneier B </p>
+
+<p><i>Applied Cryptography, Protocols, Algorithms,
+and Source Code in C first edition</i>, John Wiley &amp; Sons, 1994 </p>
+
+<p><br>
+[8] Kernighan B W, Ritchie D M </p>
+
+<p><i>The C PROGRAMMING LANGUAGE Second edition</i>,
+Bell Telephone Laboratories, 1988 </p>
+
+<p><br>
+[9] Blum M, Micali S </p>
+
+<p><i>Advances in Cryptology</i>, Springer-Verlag,
+1985 </p>
+
+<p><br>
+[10] Deutsch G et al </p>
+
+<p><i>Delphi 3</i>, Micro Application, 1997 </p>
+
+<p><br>
+[11] Martinez S </p>
+
+<p><i>Official project home page</i>, <a
+href="http://www.bcrypt.com/">http://www.bcrypt.com</a> </p>
+
+<p><i>Company home page</i>, <a
+href="http://www.encryptsolutions.com/">http://www.encryptsolutions.com</a> </p>
+
+<p><br>
+[12] - </p>
+
+<p><i>Search engine</i>, <a
+href="http://www.hotbot.com/">http://www.hotbot.com</a> </p>
+
+<p><br>
+[13] - </p>
+
+<p><i>Search engine</i>, <a
+href="http://www.altavista.com/">http://www.altavista.com</a> </p>
+
+<p><br>
+[14] - </p>
+
+<p><i>Search engine</i>, <a
+href="http://www.yahoo.co.uk/">http://www.yahoo.co.uk</a> </p>
+
+<p><br>
+[15] - </p>
+
+<p><i>Windows shareware and freeware WEB site</i>, <i>BCRYPT
+application. </i><a href="http://www.winfiles.com/apps/encrypt-file.html">http://www.winfiles.com/apps/encrypt-file.html</a>
+</p>
+
+<p><br>
+[16] SUN </p>
+
+<p><i>Unix FTP application archives</i>,<i> bugs
+algorithm</i>.<a href="ftp://ftp.sunsite.unc.edu/pub/Linux/apps/cryp
+to/">
+ftp.sunsite.unc.edu/pub/Linux/apps/crypto/</a> </p>
+
+<p><br>
+[17] SUN </p>
+
+<p><i>Unix WEB application archives</i>,<i> bugs
+algorithm</i>.<a href="http://www.sunsite.unc.edu/pub/Linux/apps/crypto/">http://www.sunsite.unc.edu/pub/Linux/apps/crypto/</a>
+</p>
+
+<p><br>
+[18] - </p>
+
+<p><i>Cypherpunks mailing list</i>,<a
+href="mailto:cypherpunks-request@toaq.com">cypherpunks-request@toaq.com</a> </p>
+
+<p><br>
+[19] CNRS </p>
+
+<p><i>Electronic french newspaper LMB</i>,<a
+href="http://www.lmb.cnrs.fr/Webdo.html">http://www.lmb.cnrs.fr/Webdo.html</a> </p>
+
+<p><br>
+[20] Martinez S </p>
+
+<p><i>Personal home page</i>, <a
+href="http://www.asi.fr/~martinez">http://www.asi.fr/~martinez</a> </p>
+
+<p><i>Company home page</i>, <a
+href="http://www.encryptsolutions.com/">http://www.encryptsolutionscom</a> </p>
+
+
+
+</html>
+
+
+

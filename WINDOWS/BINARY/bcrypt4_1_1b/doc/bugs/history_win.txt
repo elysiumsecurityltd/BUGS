@@ -1,0 +1,98 @@
+ÑÑ February 2015 Ñ
+http://www.elysiumsecurity.com
+Ñ
+12/11/00
+London / UK
+
+
+--------------------------
+HISTORY BCRYPT for Windows
+--------------------------
+
+
+
+--- V 4.0 ---
+
+* 12/11/00:   - Added BSSL feature
+              - Added buttons in the information Window allowing the user to change settings
+                without going to the option menu.
+              - Minor bugs Fix
+
+* 11/11/00:   - Added new Library Features:
+                . Dynamic Round, Modulo Swap, Block Shuffle, Key Buffer
+		. Key Buffering for the seed process
+
+* 10/11/00:   - Compatible with the new BUGS Library 4.0.0
+
+
+--- V 3.1 ---
+
+* 23/10/00:   - New BUGS Library: v3.5.3
+	          - Corrected a small problem while looking at the default browser in the registry
+              - Corrected problem when selecting FILE as the KEY type
+              - You can now overwrite a KEYFILE when generating a new key. 
+	          - Updated Documentation
+	          - Documentation is now in HTML format rather than RTF.
+              - Corrected a problem when trying to stop a BIG key generation 
+
+* 19/10/00:   - Fixed bug when viewing a file in the "View File TAB"
+	      - Fixed bug when selecting the KEYLENGTH.
+
+--- V 3.0 ---
+
+* 07/10/00:   - Redesign the application
+	      - You can now select the priority of the bcrypt's thread
+	      - Corrected an error with itoa();
+	      - Extra error check
+
+--- V 2.5 ---
+
+* 02/10/00:   - New BUGS library: v3.5.1 correcting problems with ASCII mode on Windows. When you send an email on
+		Windows it breaks long lines and add hidden characters to each line ('\par')
+
+	      - Cleaned up the code.
+
+--- V 2.4 ---
+
+* 01/10/00:   - New BUGS library: v3.5.0
+              - Added file overwrite option in the crypt and decrypt tab
+	      - You can now select BMP and JPEG pictures from the "view Picture" tab
+              - New ADVANCED Options: 
+ 		mode Binary(default) or Ascii
+		This allows you to produce a cipher file in ASCII and therefore use it in text editor or email.
+		If you crypt a file using the ASCII mode you have to use the ASCII mode to be able to decrypt it.
+	      - New option in the text editor tab, you can now crypt/decrypt the text you have just typed in ASCII mode. 
+              - New BUGS Official logo.
+
+--- V 2.3 ---
+
+* 26/09/00:   - New BUGS library: v3.4.1
+	      - Fixed problem with the tab order of the different component.
+	      - First LOGO for the BUGS algorithm is now included in this package. It has been
+                done by Florent Martinez (see CREDITS.txt) and it might change within few months.
+
+--- V 2.2 ---
+
+* 30/09/00:   - New "logs" directory
+	      - Removed the Edit option for the "Power" combo companent
+              - Fixed a problem with the Help files directory "not Found"
+              - Fixed a problem with the "Cancel" buttons which were ignored
+              - Fixed a problem when opening the "View BMP" dialog box as after you were always prompt
+		for a BMP when you were opening a dialog box.
+	      - Added extra errors check, for example: When you do not enter a password
+	      - Changed the buttons behavior of "Basic Logs" and "Advanced Logs"
+	      - In the Text Editor: confirmation box option if you want to overwrite an existing file
+	      
+              Special thanks to Thierry Martinez for the testing of bcrypt !
+
+
+--- V 2.1 ---
+
+* 19/09/00:   - Added slides bar for the Editbox in the "VIEW FILE" tab
+	      - Minor update in the documentation
+	      - Added some information about the BUGS contest
+
+--- V 2.0 ---
+
+* 18/09/00:
+              - First public release.

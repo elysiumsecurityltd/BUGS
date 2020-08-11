@@ -1,0 +1,535 @@
+—— February 2015 —
+http://www.elysiumsecurity.com
+—
+
+19/11/00
+London, England.
+
+
+Based on the following version:
+18/02/1998
+
+
+BUGS V4.0.0
+
+Here is an explanation of the libcrypt function you can use :
+
+In all these functions, I return 1 if the action succeded and 0 if it
+failed. (INTEGER)
+
+I FIRST STEPS
+-------------
+
+	1) Include the following headers which can be found in bugs-4.0.0/include/
+           #include "bstandard.h"
+           #include "extra.h"
+           #include "wrapper.h"
+
+           If you are using other functions than the one defines in wrapper.h
+           then you'll need to include other headers such as main.h, utils.h,
+           misc.h, etc
+
+	2) You need the following GLOBAL variable:
+
+	  globalvar *varinit;
+
+	  Which you usually declare just after the #include and just before the main()
+
+	3) you MUST CALL binit() in your application before you do ANYTHING !
+	   This will initialise important variables needed by the library. 
+           You can also assign your own value to these variables but it should
+           not be necessary.
+           Unless...
+           You will have to overwrite the default value assign to these variables
+           by binit() just after you called this function if:
+           a) You want to use another value for KEY_BUFFER than 16 (default)
+           b) Overwrite the value of MISC if you want to desactivate some of the
+              dynamic options by doing for example:
+              If you only want the ROUND and SHUFFLE to be dynamic:
+              varinit->MISC = 0;
+              varinit->MISC ^= BMASK_ROUND;
+              varinit->MISC ^= BMASK_SHUFFLE;
+         
+
+So here a small example:
+
+/* ----------- START ----------- */
+
+#include <stdio.h>
+#include "bstandard.h"
+#include "extra.h"
+#include "wrapper.h"
+
+globalvar *varinit;
+
+main()
+{
+binit(128,1,"test.log",0,varinit);
+printf("\n Hello World. This is just an initialisation.\n");
+}
+
+/* ----------- END ----------- */
+
+varinit is just a structure:
+
+/*
+ * NB_BYTE     : Lenght in bytes of the int I am using
+ * NB_BITS     : Number of bits of the int I am using
+ * NB_SHIFT    : shift to use for the division in bcrypt_swap()
+ * KEYLENGTH   : Length of the key used to crypt
+ * NB_INDEX    : Number of index of the aray that will contain the cipher text
+ * NB_CHAR     : Number of characters of the cipher text and of the clear text
+ * USER_LENGTH : Length of the username you can use
+ * RANDON      : Random Number Generator algorithm to use
+ * SEED        : Initial Seed to use with the RNG
+ * MISC        : if set to 1 then it will exit most of the crypt functions
+ *               (Useful if you are creating a multitask application)
+ * PROGRESS    : This should show an estimation of the encryption
+ *		         /decryption progress 
+ *               PLEASE NOTE IT COULD BE >100
+ * KEY_BUFFER  : Nb of Key to generate in order to create the buffer used in 
+ *               seed(), this creates to key dependancy.
+ * BCRYPT_ENDIAN  : If set to 1 then your computer is using 
+ *		         big endian to store data.
+ * VERSION     : Libcrypt version number (as a string)
+ */
+
+typedef struct
+         {
+          int NB_BYTE;
+          int NB_BITS;
+          int NB_SHIFT;
+          int KEYLENGTH;
+          int NB_INDEX;
+          int NB_CHAR;
+          int USER_LENGTH;
+          int RANDOM;
+          int SEED;
+          int MISC;
+          int PROGRESS;
+          int KEY_BUFFER;
+          int BCRYPT_ENDIAN;
+          char LIB_VERSION[10];
+         }
+
+You should not need to use these variables but this enable the different cryptography functions
+to have the same set-up.
+
+II FUNCTIONS
+------------
+
+-----> binit(int length, int random, char *file_name,int mode,
+             globalvar *varinit)
+
+       In this function I initialise the variable.
+
+       Parameters:
+	1) Length of the key you are going to use
+    2) Random algorithm to use:
+       random = 0, you want to use the standard C random function
+       random = 1, you want to use the ISAAC random function which is
+                   supposed to be better !
+    3) You can specify the filename where the error output will be written
+       if you choose mode = 1 for the next parameter
+	2) mode = 0, error are written in the standard error output
+	   mode = 1, error are written in the file specified above or 
+                 in 'bugslib.log' if the parameter 3) is an empty
+                 string.
+	   mode = 2, no error are written
+
+	   these mode are useful if you want to generate a log
+	3) this structure contains all the global variable used by 
+	   the library.
+	   You have to declare a variable with this type at the begining 
+	   of your program.
+
+
+	This function MUST be called before any other function !
+	Only one call is required, but you can call this function several times
+	if you want to change the key while you are crypting.
+	(That may crash the applciation if you do that ...)	
+
+
+	Rem: See the example "bcrypt.c" or anyother applications in this package
+
+
+-----> RETURN_TYPE bssl(int level, int *round, int *block_crypt, int *block_shuffle,
+                        globalvar *varinit, int mode)  
+
+   This function automatically set some parameters use by the cryptography
+   library and RETURN THE POWER LEVEL. (on the 19/11/00 you have 5 power
+   levels: 0 to 4)
+
+   You should call this function after binit()
+
+   It will set the variable sent as a parameter and some global variables as
+   follow: 
+
+   levels currently available:
+   D_ = Dynamic
+                  Keylength|Key Buffer|D_Buff|D_Round|D_Swap|D_Shuf|Power
+   BSSL_VLOW:     128      |8         |no    |no     |no    |no    |2
+   BSSL_LOW:      128      |8         |no    |no     |yes   |yes   |3
+   BSSL_MEDIUM:   128      |16        |yes   |yes    |yes   |yes   |4
+   BSSL_HIGH:     256      |16        |yes   |yes    |yes   |yes   |4
+   BSSL_VHIGH:    512      |32        |yes   |yes    |yes   |yes   |4
+ 
+                  Round|Block_Crypt|Block_Shuffle
+   BSSL_VLOW:     2    |0          |4
+   BSSL_LOW:      2    |0          |4
+   BSSL_MEDIUM:   2    |0          |4
+   BSSL_HIGH:     2    |0          |4
+   BSSL_VHIGH:    4    |0          |4     
+
+   The BSSL level are defined in bstandard.h, and start from 
+   0(NO BSSL), 1(VLOW) to 5(VHIGH)
+
+   If you specify the BSSL level to 0, then this function won't change
+   any parameters and send back a negative value for the POWER level.
+
+   Parameters:
+   1) BSSL level you want to use
+   2) this will set the nb of round
+   3) this will set the block crypt 
+   4) this will set the block shuffle
+   5) Your global variable
+   6) mode = 0, quiet (no warnings, no information)
+      mode = 1, verbose (few warnings and information)
+      mode = 2, debug (all warnings and information, can generated HUGE 
+                ouput files !)
+   7) Your global variable. 
+       
+
+-----> bkey_generator (unsigned char *pass_param, int length, int complexity, char *file_path,
+		        int power, int random, int mode, globalvar *varinit)
+
+	This function is useful to generate key.
+
+	Parameters:
+	1) If you want to initialise the key generation with a password, you
+	   have to send it in this parameter.
+	2) You have to send the length of the string send in the first parameter
+	   if you do not want to use a password as the initialisation,
+	   just sent the 0 value in this parameter.
+	3) The complexity that is going to be used during the swapping process
+	   It should be 2. Higher value may increase security but ther is no
+	   statistical proof of this and it would slow down slightly the generation.
+	   The choice is yours.
+	4) location of the file that will contain the key : key file
+	5) Power you want to use to generate the key.
+	   (POWER 0,1,2,3 or 4)
+        6) random = 0, you use a password for the initialisation.
+	   So you have to be sure that the first parameter contain some 
+	   characters.
+	   random = 1, you want to use the random initialisation.
+	   I use the standard C random function.
+    7) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                ouput files !)  
+	8) Your global variable.
+
+
+	Rem: See the example "bkey.c"
+	   
+
+------> blogin (TYPE_INT *code_file, unsigned char *pass_clear, int length,
+	        int power, int complexity, int mode, globalvar *varinit)
+
+	This function is used if you want to manage several user,
+	in fact to replace or to add a new login step.
+	this function check if the clear password send in parameter will have
+	the same cipher form than the cipher passwd  sent in parameter.
+
+	So you have to use the function read_passwd before to get
+	the cipher password that matche a user.
+
+	Parameters:
+	1) you have to send the password of the user you get with passwd_funtion
+	2) you send the clear password that you want to check if he will
+	   generate the same cipher password sent in the first parameter
+	3) length of the clear password sent in the second parameter.
+	4) Power you want to use to crypt.
+	   (POWER 0,1,2,3 or 4)
+	5) The complexity that is going to be used during the swapping process
+	   It should be 2. Higher value may increase security but ther is no
+	   statistical proof of this and it would slow down slightly the generation.
+	   The choice is yours.
+    6) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)  
+	7) global variable
+	
+	Once the clear password has been crypted, I compare with the cipher
+	password sent in parameter.
+	And I return 1 if it is the same cipher form. 
+
+	Rem: See the example "blogin.c"
+
+
+----->bpass (TYPE_INT *pass_code, unsigned char *pass_clear, int length,
+       	     int power, int complexity, int mode, globalvar *varinit)
+
+
+	This function generate a cipher password from a clear string.
+
+	Parameters:
+	1) This is were the cipher password will be stored
+	2) it is your clear string you want to crypt
+	3) it is the length of the string sent in the third parameter
+	4) Power you want to use to crypt.
+	   (POWER 0,1,2,3 or 4)
+	5) The complexity that is going to be used during the swapping process
+	   It should be 2. Higher value may increase security but ther is no
+	   statistical proof of this and it would slow down slightly the generation.
+	   The choice is yours.
+    6) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)  
+	7) global variable
+
+	Rem: See the example "bpass.c"
+
+
+-----> bfile (int choice, char *name_clear, char *name_code, char *name_key,
+         unsigned char *pass_param, int length_pass, int power, int complexity,
+         int block_crypt, int block_shuffle, int memory, int mode,
+         globalvar *varinit)
+
+	This function will crypt a file
+    Please note that if you choose the ASCII mode, the crypted data will
+    be placed between the 2 following KEYWORDS:
+    [BUGS_ASCII_MODE_v02_START]
+    [BUGS_ASCII_MODE_v02_END]
+ 
+    Where v02 is the ASCII algorithm version.
+
+	Parameters:
+	1) choice = 0, you want to crypt
+	   choice = 1, you want to uncrypt
+       choice = 2, you want to crypt and generate an ASCII crypted file
+       choice = 3, you want to decrypt a file which is an ASCII crypted file.
+	2) name of the file you want to crypt
+	3) name of the file crypted
+	4) name of the file that contain the key, if you want to use a key
+	   file instead of a password.
+	   You can also use any kind of file to crypt !
+	   if you do not want to use a key file, just send ""
+	5) Password you want to use to crypt the file
+	   if you use a key file, just send ""
+	6) length of the string sent in the previous parameter
+	7) Power you want to use to crypt.
+	  (POWER 0,1,2,3 or 4)
+	8) The complexity that is going to be used during the swapping process
+	   It should be 2. Higher value may increase security but ther is no
+	   statistical proof of this and it would slow down slightly the generation.
+	   The choice is yours.
+	9) The crypt's block is the size of your "work space" which mean the algorithm
+	   will crypt a file working within block having the size you specified in
+	   this parameter. The block crypt's has to be at least as big as the size of the 
+	   key used. (if you are using a 128 bits key, you need this parameter
+	   to be >= 16).
+	   If this parameter is set to 0 it means the algorithm will consider the file as
+	   only ONE big block (default value).
+	10) The shuffle's block is the size of the block used during the shuffle
+	   process. It has to be at least has big as the size of the type of 
+	   integer you are using. By default, the TYPE_INT is set to "long"
+	   in libcrypt.h. On Linux the long type is 4 BYTES, in this case
+	   this parameter has to be >=4.
+	   For security and efficiency reason this parameter has to be at least
+	   6 times smaller than the block's crypt value. (previous parameter).
+	   When you use a 128 bits keylength and the probability seed (power 1 or 4)
+	   then the actual key length is not 16 but 32 as with the
+	   probability seed the length of the string is increase by the
+	   size of the key. In other words with the power 1 or 4 you can
+	   have a shuffle's block of 4 and a crypt's block of 16.
+	11) memory = 0, The cryptography algo will use less memory and will do more disk access (slow)
+	    memory = 1, The cryptography algo will load all the blocks into memory and will do less disk access.
+	                This method is the fastest but could generate an error if you try to crypt a
+	                very very large file... This should anyway be the DEFAULT MODE !
+    12) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)  
+	13) global variable
+
+	Rem: See the example "bcrypt.c"
+
+
+
+-----> bstream (int choice, unsigned char *stringtocrypt, int length_string,
+       char *name_key, unsigned char *pass_param, int length_pass, int power,
+       int complexity, int block_shuffle, int mode, globalvar *varinit)
+
+
+	This function is similar to the bfile() one but here you are 
+	crypting a string.
+	
+	Parameters:
+	1) choice = 0, you want to crypt
+	   choice = 1, you want to uncrypt
+	2) String you want to crypt
+	3) Length of the string to crypt (previous parameter)
+        4) Name of the Key file, if you are using a password instead just
+           send an empty string as a parmaeter ""
+	5) Password to use to crypt the string
+	6) length of the string sent in the previous parameter
+	7) Power you want to use to crypt.
+	  (POWER 0,1,2,3 or 4)
+	8) The complexity that is going to be used during the swapping process
+	   It should be 2. Higher value may increase security but ther is no
+	   statistical proof of this and it would slow down slightly the generation.
+	   The choice is yours.
+	9) The shuffle's block is the size of the block used during the shuffle
+	   process. It has to be at least has big as the size of the type of 
+	   integer you are using. By default, the TYPE_INT is set to "long"
+	   in libcrypt.h. On Linux the long type is 4 BYTES, in this case
+	   this parameter has to be >=4.
+	   For security and efficiency reason this parameter has to be at least
+	   6 times smaller than the block's crypt value. (previous parameter).
+	   When you use a 128 bits keylength and the probability seed (power 1 or 4)
+	   then the actual key length is not 16 but 32 as with the
+	   probability seed the length of the string is increase by the
+	   size of the key. In other words with the power 1 or 4 you can
+	   have a shuffle's block of 4 and a crypt's block of 16.
+    6) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)  
+	11) global variable
+	
+	Rem: See the example "bchat.c"
+	
+	
+----- >bcrypt_read_passwd
+               (char *user, char *file_path, TYPE_INT *code_file, int mode,
+					                globalvar *varinit)
+
+	This function read a password of a user in a password file.
+	You generate the password file with the write_password function.
+
+	Parameters:
+	1) name of the user that you want to get the cipher password in the
+	   password file
+	2) location of the password file
+	3) it is where the cipher password will be stored
+    4) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)  
+	5) global variable
+
+	Rem: See the example "bpass.c" or "blogin.c"
+
+	
+
+-----> bcrypt_write_passwd (char *user, TYPE_INT *pass_code, char *file_path,
+                           int mode, globalvar *varinit)
+
+	This function writes a password in a password file, like 
+	/etc/password.
+	Becareful, I do not store any ID or GID
+	that can be done by your applciation.
+
+	Parameters:
+	1) name of the user
+	2) that should contain the cipher password of the user
+	3) location of the password file
+    4) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)  
+	5) global variable
+
+	Rem: See the example "bpass.c"
+
+   
+-----> bcrypt_delete_passwd (char *pass_file, char *user, int keylength,
+  				            int mode, globalvar *varinit)
+
+	This function delete a user from the password file.
+	The old password file is saved in the file pass.old
+
+	Parameters:
+	1) location of the password file
+	2) name of the user you want to delete
+	3) Length of the key used to generate the cipher password of the
+	   user.
+	   Be very careful with this parameter, indeed, if you specify a length
+	   superior of the key's length used to generate the cipher password,
+	   you may destroy other user's data contained in the password file.
+	   It is why ou should not use differents key's length in your 
+	   password file.
+	   You can, but you have to manage it carefully.
+    4) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)   
+	5) global variable.
+
+
+	Rem: See the example "bpassdel.c"
+
+
+-----> bcrypt_write_hide (int choice, char *source_file, char *dest_file,
+			 	                                int mode)
+
+	This function hide some data in a file.
+	You can use this function to hide your cipher text.
+
+	Parameters:
+	1) choice = 0, hide data at the begining of a file
+	   choice = 1, hide data at the end of a file
+	2) location of the file you want to hide
+	3) location of the file that recevie the data to hide.
+    4) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)   
+
+
+	This function works quite simply, but is enough powerful to hide
+	some data in picture, sound, zip, exe, etc ...
+	To make that invisible choose to hide at the end of a file.
+
+	I may work later on a *real* steganograpyh algorithm, but as usual
+	time is the problem.
+
+
+	Rem: See the example "bhide.c"
+
+
+-----> bcrypt_read_hide (int choice, char *source_file, char *dest_file,
+				                                int mode)
+
+	This function extract data from a file.
+	Use it if you want to recover some hidden data.
+	
+	Parameters:
+	1) choice = 0, extract data from the begening of a file
+	   choice = 1, extract data from the end of a file
+	2) Location of the file that contain the hidden data
+	3) Location of the file that will receive the hidden data that
+	   has been extracted
+    4) mode = 0, quiet (no warnings, no information)
+       mode = 1, verbose (few warnings and information)
+       mode = 2, debug (all warnings and information, can generated HUGE
+                 ouput files !)   
+
+	Rem: See the example "bhide.c"
+
+
+------> bpow(int base, int n)
+
+	This function calculate a power : base^n
+	The standard function on my linux box seems to have some problems to
+	work propely, so I decided to write my own.
+	
+	Parameters:
+	1) The number you want to calculate the power
+	2) The value of the power
+
+
+	
