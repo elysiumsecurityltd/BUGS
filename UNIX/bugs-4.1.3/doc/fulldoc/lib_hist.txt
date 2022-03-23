@@ -1,0 +1,900 @@
+  LIBRARY HISTORY
+
+ --- V 4.0.0 ---
+
+ 19/11/2000:      - mem_seed() and file_seed() do not use the 
+                    first cipher key as it can be used by the shuffle 
+                    functions.
+                    I was already doing that with the prob_seed fuctions
+                    so there were no reasons why I shouldn't do the 
+                    same with the standard seed functions.
+                  - I've corrected the most stupid and annoying bug !!!
+                    I don't know how, but somehow I must have deleted
+                    a variable initialisation (i=0) in bstream()
+                    just before calling prob_mem_seed() this was giving random
+                    errors as 'i' was not initialised !! I've spent all
+                    sunday morning + afternoon fixing this problem !!!
+                    do you know a better way of spending a sunday ?
+                    hum... let me think... no ! I can't see anything 
+                    better to do !!!!! grrrrr...
+
+ 18/11/2000:      - Corrected a stupid problem with power = 1
+                    I was using pos_crypt and not pos_crypt_write to
+                    write the cipher data ! This bug was also in v3.x ...
+                    This was only happening if you were using a custom 
+                    block crypt and power = 1, stupid...
+
+ 17/11/2000:      - Tried all day to change the way I handle the prob_mem_seed
+                    I think I should allow block crypt to be smaller than
+                    the varinit->NB_CHAR
+                    But during my testing I had some segmentation fault :O(
+
+ 16/11/2000:      - It seems there is a problem in prob_mem_seed()
+
+ 15/11/2000:      - Optimised code
+                  - Corrected minor bugs
+
+ 14/11/2000:      - Optimised code
+                  - Removed the "bits" parameter from long_rand() and lfsr()
+                    as it is now in GLOBALVAR: varinit->NB_BITS
+                  - added the SHIFT division used only in bcrypt_swap() to
+                    GLOBALVAR: varinit->NB_SHIFT
+
+ 13/11/2000:      - Finished to clean up the code, it took more than 4 hours
+                    tonight !!!
+
+ 12/11/2000:      - Replaced the circular shift in code() and add() by 
+                    long_rand() instead.
+                  - Carried on cleaning up the code.
+ 
+ 11/11/2000:      - Added bssl()
+                  - Tuning
+
+ 10/11/2000:      - Corrected a bug in brand()
+                    When using varinit->RANDOM = 0 the SEED never changed
+                    and the random number generated was always the same.
+                    I am now using the long_rand() to change the SEED.
+
+ 09/11/2000:      - Added a new parameter to bstream() : PARAM_KEYFILE
+                    you can now sent a keyfile as a parameter for this function
+                    the same way you do with bfile()
+
+ 08/11/2000:      - Updated the ASCII_MODE to v04. 
+                    This version will ignore any character different from
+                    0 -> 9
+                    A -> F
+                    This brings a much more robust ASCII MODe, as noe even
+                    if you do a forward of an ASCII encrypted email and 
+                    your mail program automatically adds ">" it will
+                    still be possible to uncrypt such a message !
+                  - Created different MASK in bstandard.h to use with 
+                    globalvar->MISC in order to enable or not the dynamic
+                    round, modulo swap, shuffle, key buffer.
+                    This algorithm is REALLY dynamic now !!!
+                    PLEASE NOTE that now, to stop the algorithm you need
+                    to do: globalvar->MISC=1; and not anymore =666
+                  - Renamed globalvar->STOP to globalvar->MISC as you can
+                    now specify much more options within this signle variable
+                  - Added a Dynamic Key Buffer options
+                  - Added a new variable to globalvar:
+                    globalvar->KEY_BUFFER
+                    where you can specify the number of KEYS you want to
+                    store in the seed() key buffer.
+                  - Changed the way I was initialising the **pass_buffer in
+                    seed()
+
+ 07/11/2000:      - spent all day trying to compile the library on windows...
+                    it eventually worked at 3am...
+                    I can't stand windows programming !!!!
+
+ 06/11/2000:      - The new library does not compile on Windows !
+                    (what a surprise)
+                    I spent hours to figure out why...
+                    I think I found the problem.
+
+ 05/11/2000:      - Key dependancy in the seed functions finished !
+                    Now, 32 keys are generated at the beginning of these
+                    functions and stored into a buffer. Then 2 keys will be
+                    pseudo randomly selected from the buffer, XOR, and the 
+                    result will be used to seed the file/mem. Then the
+                    key which just have been used will replaced one of the
+                    2 keys used to generate it. Then 2 more keys will be 
+                    selected (it can't be the last key added to the buffer)
+                    to generate a new key, and the process starts again.
+                    That, is powerful :O)
+
+ 04/11/2000:      - Started to program a key dependancy in the seed functions
+
+ 03/11/2000:      - Bits operation affect both bits (Left and Right). Before
+                    I was only doing a logical operation on the "left" bit.
+                  - Dynamic modulo: The modulo for the swap window in
+                    bcrypt_swap() changes in function of the key generated.
+                  - Dynamic number of round: now the number of round can be
+                    100% higher than the number of round sent as a parameter.
+                    By default, round = 2, so the algorithm could double this
+                    value, depending of the key generated. 2 <= round <= 4
+                    If you specify round = 5, then 5 <= round <= 10.
+                  - Renamed the "complexity" variable to "round"
+
+ 02/11/2000:      - Splited up the library code into 6 .c files, it is now much 
+                    easier to read !
+
+ --- V 3.5.3 --- 
+
+ 24/10/2000:      - Added a stop option in the bcrypt_add()
+                    When generating a big key a lot of number are generated
+                    and without this "stop option" you could wait a long
+                    time before the function stops. Now if you set
+                    varinit->STOP = 666, the bcrypt_add() will stop.
+
+ 23/10/2000:      - Major change in the ASCII MODE !
+                    I am now using Hexadecimal numbers, the cipher files are
+                    therefore much smaller than before.
+                
+                  - Changed the Keyword in the ASCII MODE. 
+                    I am not using the lib_version anymore as this caused 
+                    compatibility problem when updating the library.
+
+                  - Added Error warning in bkey_generator()
+
+ --- V 3.5.2 ---
+          
+ 21/10/2000:      - Removed many compilation warnings: 
+                    . binit(): random file initialisation
+				    . varinit was never initialised, it was not needed but it
+                      was generating annoying warnings.
+                    . Wrong information displayed in the bcrypt_add()
+
+                  - Added Error check in bcrypt_read_hide()
+
+ --- V 3.5.1 ---
+
+ 02/10/2000:      - Fixed a Windows compatibility problem with the ASCII mode.
+                   When you send an email with very long lines
+                   (at least with outlook express)
+                   each line is broken up to a certain length and some
+                   hidden characters are added at the end of the line: '\par'
+                   I haven't got a clue why on earth outlook does that !?
+                   It took me some time to find out this problem and it
+                   is now fixed.
+
+                 - Changed the starting FLAG for the ASCII mode and replaced
+                   spaces by underscores: [BUGS_v351_ASCII_MODE_STARTED]
+                
+
+ --- V 3.5.0 ---
+
+ 01/10/2000:     - Fixed a problem with power=3. I was always working as
+                   if I was using a probability seed ! therefore couldn't
+                   decrypt any file which were crypted with this power !
+                   This was a stupid bug, but I only did a lot of test with
+                   the maximum power (4). Adding the ASCII mode made me
+                   discover this bug as I had to test all the power level !
+
+                 - Added an extra option in bfile, this allows you to generate
+                   an ASCII output.
+                   If choice = 2: the crypted result will be converted in
+                   numbers.
+                   If choice = 3: you can decrypt a file which as previsouly
+                   been crypted with choice = 2
+                   I've done this option because the crypted result is
+                   by default an unsigned char, you can't send by email
+                   unsigned char as they are going to be automatically 
+                   converted to SIGNED char. Therefore with this ASCII mode
+                   the crypted result will be converted into numbers. You can
+                   send this ASCII result by mail !
+
+ --- V 3.4.1 ---
+
+ 26/09/2000:     - Fixed problem in bfile() where I am doing 2 tests for 
+                   closing or not the files used by the library. The test
+                   was ignored and the files were always closed.
+                   This could have potentialy be a problem if the source
+                   file = destination file.
+
+                 - Removed useless variable initialisation in bstream, 
+                   bcrypt_test, bcrypt_add.
+
+ --- V 3.4.0 ---
+
+ 17/09/2000:     - First attempt to do a progression percentage of the 
+                   library work. This is really basic and the varinit->PROGRESS
+                   could even be sometimes >100 but at least that should
+                   give you an indication that the library is still 
+                   working and is not frozen.    
+             
+                 - There is a new parameter in binit(), its a string used
+                   to specify the error log file. If you send an empty string
+                   the error log file will be automatically set to bugslib.log
+
+                 - I now initialise the varinit->STOP to 0 in binit()
+
+                 - Added a flag to the library: _LIBCRYPTDLL
+                   this is for windows compatibility. 
+                   in libcrypt.h I check if I am using the header to compile
+                   the library (if the _LIBCRYPTDLL flag is defined) or not.
+                   if not the RETURN_TYPE will be (dllimport) rather than
+                   (dllexport). Well... only windows programmer can
+                   understand this !
+
+  --- V 3.3.2 ---
+
+ 07/09/2000:     - Corrected typos when checking if BCRYPTLOG != stderr.
+                   I used Kedit to replace this statement by the new one
+                   and sometimes it repeated the statement 3 times !
+                   It was not really a big problem but not very "clean code". 
+
+                 - Added Errors check for missing files in write_hide()
+
+                 - Added '\0' when I was backing up a file on write_hide()
+                   as it could result in a wrong filename otherwise.
+
+                 - Added Errors check in bkey_gnerator()
+
+  --- V 3.3.1 ---
+
+  02/08/2000:    - Changed the default TYPE_INT from long to int
+                   this is because on some 64 bits system, long are
+                   64 bits. 
+
+  --- V 3.3.0 ---
+  
+  30/07/2000:    - Major change in bstream() to make it compatible with bfile()
+                   bfile() read data from a file and reverse the characters,
+                   for example the following data file "abcd" would be stored
+                   as follow: dcba. This is true with "Little Endian" system
+                   which is the default mode I choosen for BUGS. Therefore
+                   I had to reverse the string sent to bstream() to make it
+                   compatible with bfile(). Why on earth someone has invented
+                   Little and Big endian !?!?!? ;o)
+
+                 - Minor change in bstream(), cleanup redondant code
+
+  --- V 3.2.1 ---
+
+  29/07/2000:    - Noticed that there is maybe a difference in the way the
+                   encryption is done between bstream() and bfile()
+
+  28/07/2000:    - Minor change in bfile(), cleanup redondant code
+
+  25/07/2000:    - Renamed the BIGENDIAN variable to BCRYPT_ENDIAN as 
+                   windows didn't seem to like this variable name.
+
+                 - Added extra output information when using -v (mode = 2)
+
+                 - Added comments
+
+  --- V 3.2.0 ---
+
+  20/07/2000:    - Found why there was some incompatibility between crypting
+                   on Solaris/SPARC and on Linux/x86. This was an "endian"
+                   problem ! It took me a long time to find out this 
+                   problem ! it was because I never heard about this kind of 
+                   problem before. It is the way the computer stores data,
+                   if it pushes bytes from the left or from the right.
+                   Thanks to comp.lang.c I have got a small test which
+                   detects if the computer use "Big-endian" or "Little-endian"
+                   I have modified the way I was doing a fread() and fwrite()
+
+                 - Created 2 new functions: bcrypt_fread_int() and
+                   bcrypt_fwrite_int()
+                   I now call these function instead of the standard fread()
+                   and fwrite() when I store data in integer.
+
+                 - Minor modification in read_hide() and write_hide() to
+                   be able to use the 2 new function described above.
+
+                 - Removed the varinit->MAX_INT, I am now using a LOGICAL OR
+                   rather than doing a multiplcation % MAX_INT. Therefore
+                   the algorithm is not compatible with the previous version.
+                   I think it is better this way ! 
+
+                 - Added a new variable varinit->PROGRESS which should show
+                   the progress while crypting/decrypting.
+
+                 - Soon I may be able to sleep early and have a life ;o)
+
+  --- V 3.1.1 ---
+
+  19/07/2000:    - Corrected an error in meme_seed_prob() when I was storing the
+                   random number in the file. This problem should have raised
+                   some segmentation fault as I was getting items in array at
+                   indexes such as -1,-2,etc. Only in certain condition of
+                   course. Nethertheless, neither Linux,SunOs,Windows reported
+                   this error !!!! amazing...
+                   I found this error by tring to find out why SunOS/Linux 
+                   encryption seems to be uncompatible !
+
+                 - Removed useless information message regarding the 
+                   Maximum standard random number
+
+  18/07/2000:    - Changed output message for the bstream()
+                   as it was reporting the same messages than bfile()
+                   ("Crypting File in progess" instead of "Crypting Stream")
+
+  --- V 3.1.0 ---
+
+  16/07/2000:    - Changed some errors messages in bfile
+                 - New parameter in binit for the RNG selector
+                 - Added a seed initialisation for the RNG using 
+                   /dev/urandom or /dev/random or time()+clock()
+                 - Added a new parameter in globalvar: STOP
+                   if you set this variable to 666 it will stop the library
+		
+  15/07/2000:   - Improved the buffer in isaac() 
+
+  14/07/2000:   - Added a new funtion brand() which handle the different 
+                  RNG functions.
+                - Added a buffer to isaac()
+                - Added a new variable in varinit: SEED 
+                  which will be used as the initial seed in the RNG
+
+  13/07/2000:   - Added new random function: isaac()
+                - Added a new variable to varinit (RANDOM) to choose the 
+                  random number generator (RNG) that will be used during
+                  the crypt process
+ 
+  03/07/2000:   - Corrected minor errors detected with the Windows C++ compiler
+                - Added an extra function in order to create a Windows DLL
+
+  --- V 3.0.0 ---
+
+  18/05/2000:	- Minor change in the errors output
+		- Added some parameter check regarding the KEYLENGTH
+
+  08/05/2000: 	- Finished to comment and tidy up the code.
+		  This algorithm is ready for testing !!
+
+  07/05/2000:	- Right... I've decided to do not change my algorithm
+		  to be able to crypt/uncrypt the same data with 
+		  what ever width int type I was using.
+		  The reason for this is that
+		1) it would need a lot more work than expected
+		2) it would make my algorithm weaker than it could
+		   be when using really big int width (64,128, etc)
+		3) I think that it is, in fact, a good security
+		   option to have a sort of plateform dependance !
+		  In fact, my package is designed first to use 32 bits 
+		  integer variables. This would work fine on 32 bits
+		  computer as well as 64, 128 ,etc bits computer !
+		  It just won't work the same on a 16 bits computer.
+	      (unless you can simulate a 32 bits variable)
+		  I am convinced this is a much better solution !
+
+  06/05/2000:	- Minor changes in bcrypt_add()
+
+  05/05/2000:	- Corrected an old bug in bcrypt_add, I was only adding 
+				  a numbers to the password when I was in mode=2 which
+				  is the debugging mode... stupid bug !
+
+  04/05/2000:	- Worked on a new bcrypt_add() to work on 16,32,64 bits
+
+  03/05/2000:	- The new bcrypt_add() is still not working, I don't know why!
+
+  02/05/2000:	- Carried on the "good" work from yesterday, I need to
+				  write a new bcrypt_add(), not only because I have
+				  screwed it up yesterday, but because it is not 
+				  working with a multiple palteform system (16,32,64)
+
+  01/05/2000:	- Well.... I worked on the algorithm just after I came back
+				  from a night club. I may have done more damaged than good !
+				  drinking or programming you have to choose ! ;o) 
+		
+
+  30/05/2000:	- Changed the way I was calculating the biggest integer
+				  I now have a new variable in varinit:
+				  varinit->MAX_INT
+				  which will receive the maximum value for a 16 bits int
+				  The initialisation of this variable is done as usual 
+				  with the binit()
+
+  29/05/2000:	- Corrected the bug in bcrypt_swapp() this was because when
+				  I was calculating the biggest int value I was not 
+				  shifting the bits correctly when using 64 bits.
+				- Even if the algorithm is now working on a 64 bits 
+				  computer I realised that what you crypt/uncrypt is 
+				  dependant of the length of the int you are using.
+				  This means if you crypt something on a 64 bits computer 
+				  you can only uncrypt is on a 64 bits computer.
+				  If you crypt on a 32 bits computer, you can only uncrypt 
+				  on a 32 or 64 bits computer, not on a 16 bits computer.
+				  This is due of the way I generate pseudo random
+				  number and the way I add them to an element of the 
+				  pass_code[]
+				  This could be seen as a security features, and then a good
+				  point... but I want something "universal" !! which works
+				  on any machines (amiga, PC, sparc... palm pilot ! ;o)
+				  Argh ! I thought my algorithm was finished !!!!
+				  grrrr.... I need to work on it again !
+				  ok... let's finished it !
+
+  28/05/2000:	- Located where the 64 bits bug is: bcrypt_swapp()
+
+  27/05/2000:	- Corrected minor bug in bfile()
+
+  26/05/2000:	- The algorithm still doesn't when using int long long
+				  as the default int type (aka 64 bits)
+
+  25/05/2000:   - Tuning and commenting the algorithm
+
+  24/04/2000:   - Replaced fclose(BCRYPTLOG) by 
+				  if (BCRYPTLOG != stderr) fclose(BCRYPTLOG); 
+				- Minor change in write_passwd()
+				- bstream() is finished ! as my cryptography algorithm !!
+				  it was the last function to implement...
+				  I now just need to tune my algorithm !
+				- Removed all %256 I was doing as I think it was useless
+				- Problem in bstream because I was not using UNSIGNED char
+
+  23/04/2000:   - Discover a bug in bfile when using the memory method
+				  and the probability seed, I was using tmp_block_crypt
+				  instead of block_crypt when writing a block to a file.
+				- Major bug corrected: for the last block in bfile,
+				  I wasn't reseting the length_mem variable to
+				  length_mem = block_crypt/varinit->NB_BYTE
+				  I don't really understand how this was working anyway !
+
+  22/04/2000:   - Problem with bfile when using memory and prob_seed
+			    - Discover a problem when doing an fclose(BCRYPTLOG)
+				  when BCRYPTLOG=stderr and you are using the stderr
+				  later in your program. I never done that before
+				  so I never discovered this obvious bug...
+				  I have to decide if in fact I never close the BCRYPTLOG
+				  of if I test if its equal to stderr
+
+  21/04/2000:	- Minor changes to bstream(), still doesn't work !
+
+  20/04/2000:	- Problem with the bstream function: 
+				  I was changing the pointer of the string sent in
+				  the parameters to point to a string local to the
+				  library and even if I was seting it as static
+				  it was not working. This was not a good solution anyway !
+
+  19/04/2000:   - First implementation of the bstream function
+				- Corrected minor bugs in the way I was setting up  the 
+				  length_shuffle.
+				_ Tested on Linux and Solaris, every thing seems to work fine.
+				  There is still a problem on Sparc when I try to use 64 bits 
+				  variables. I don't think this is a big problem, I'll
+				  work on it later.
+
+  18/04/2000:   - THAT'S IT !!!! EVERYTHING SEEMS TO WORK FINE !!!
+				  is this the light at the end of the tunnel ?!?
+				  I've worked like mad today ! I've changed the way I
+				  was handling the block_crypt, it is much simpler now,
+				  I have corrected few other bugs in the bfile function
+				  (due to the fact it was too complicated !)
+				  And I eventually finished the mem_seed function !!
+				  I have done some testing with custom block crypt AND
+				  block shuffle and everything seems to work fine !
+				  It's so great to crypt something using the Hard-Disk
+				  method and decrypting it using the Memory method...
+				  Well, the great thing is that it ... actually works !!
+				  ;o))
+				  And the fact I can customise the length of the blocks 
+				  I use in different functions is, I think, a little
+				  revolution in cryptography !
+				  I don't know any algorithm you can customise so
+				  much ... in fact my algorithm is the first DYNAMIC
+				  CRYPTOGRAPHY ALGORITHM !!!
+				  Ok, calm down ... it's just working, that's must be why :O)
+				  well, let's get some sleep, at last !!!
+
+  17/04/2000:   - Corrected minor bugs in bfile, still working on the mem_seed
+				  function. I am thinking of changing the way I handle
+				  block_crypt in bfile as I do that in a really complicated
+				  way at the moment...
+
+  16/04/2000:   - That's it ! it works now !!!! I found the last bug (hum...)
+				  when I use a probability seed and a shuffle. The problem was
+				  at the shuffle part when I was crypting a file, it was the
+			      part which was re-calculating the length_shuffle in bfile()
+				  This seems to work fine, I tried with different crypt's block
+				  and even with custum shuffle block ! 
+				  I still need to convert this file_seed_prob to mem_seed_prob
+				  as this would speed up the crypting process if the user
+			      select the memory option.
+				  I guess I will find new bugs...
+				  Even if, at first, it seems a lot of hassle to do 2 similar
+				  functions but one using only the memory and the other file
+				  access, at least this allow me to find many bugs !
+
+				- After looking on the net and on the news to find a way of 
+				  reducing the length of a file without using a tempory file
+				  It just seems that's impossible. I therefore need to keep
+				  using a tempory file. But before I delete it I fill this file
+				  with 0. Thanks to the people from comp.lang.c for their
+				  ideas.
+
+			    - I think I will have to start again to write comments in my 
+				  source code as I've been  adding so much stuff recently and I
+				  just can't be bothered to document... it seems I've got
+				  more essential stuff to do first ! well... let's finish
+				  the algo !!
+
+  15/04/2000:   - Changed the way I was handling the last block of a file in
+				  bfile() 
+
+  14/04/2000:   - Fixed minor problem in the seed_prob()
+
+  13/04/2000:   - The seed_prob and shuffle works fine ! but doesn't when I
+				  use a custom block_crypt. I am not happy in fact with
+				  the way I solved the seed_prob and shuffle problem
+				  as I am using a tempory file to fix the problem ...
+				  The problem is that if I don't use a tempory file it
+				  is much more complicated !!! I hate that !! why every
+				  thing that should be simple HAS to be really complicated !?
+				  Anyway, once this is done I'll just have to convert the
+				  seed_prob to the memory method (as I am using the HD method
+				  now). After that the core engine of the library will be
+				  finished !! (ok, I would also like to add a stream crypt
+				  function, but it should be simple...hum! hum ! ;O)
+
+  12/04/2000:   - The bcrypt_file_seed_prob() works ! ... well... almost !
+				  It works while crypting/uncrypting in power=1(seed_prob only)
+				  It even works when using custom block_crypt ! (that was the 
+				  hard bit)
+				  But I still have a problem when I use the seed_prob AND
+				  the shuflle. I don't think this is a really big problem...
+				  But it's 3 Am and I am working tomorrow, so I'll finish it
+				  another day !
+				- Corrected a bug in bfile when I was initialising length_seed
+				  this would have caused a problem when I use custom block_crypt
+
+  11/04/2000:   - The new seed_prob function doesn't work when using custom
+				  block_crypt.
+
+  02/04/2000:	- Started the first implementation of bcrypt_file_seed_prob()
+
+  01/04/2000:   - EVERYTHING IS FINISHED !!! THERE ARE NO MORE BUGS !!!
+				  AND I AM GOING TO BED AT 10PM TONIGHT !!!!
+
+  31/03/2000:   - Fixed a problem while decrypting using shuffle and seed. Now
+			      everything should work fine !
+				- New function: bcrypt_mem_unshuffle, done in 3 minutes...
+				  as it should be !!!! 
+
+  30/03/2000:	- Fixed problem with bcrypt_mem_shuffle, this was due to the
+				  fact that at the end of a file, the algorithm was trying to
+				  access an element out of the file_mem array.
+				- MAJOR ADD-ON, I now use the new pass_code generated in
+				  bcrypt_shuffle when I am crypting a new block. Initially
+				  I was always using the same pass_code for every block this
+				  was due to the fact that I first designed this algorithm 
+				  without the block_crypt option in mind. Therefore it was a 
+				  VERY good thing that I had the previous problem (mem_shuffle)
+				  as my testing to solve it made me discover this potential
+				  security issue. In other words:
+				  Before when crypting ->
+					start crypt block
+					  generate password P1
+					    seed / shuffle the file using P1 
+						within these functions I generate more password 
+						P2,P3,..,Px
+				    Start crypt new block with P1 ... AGAIN !!  
+
+				  NEW method ->
+				    Same as above except that I use Px for every new block I
+					crypt.
+				- I start to wonder if I should write so much stuff in this
+				  history, nobody will ever read all this ! and I am sure that
+				  nobody will understand a word ! (I'm not even sure I will be
+				  able if I read this in a week). Maybe I should not do that
+				  at 3 AM ... well I should maybe not do it at all !
+				  Who cares !
+                  I'm sure it will make me laught in few years time! ;o)
+
+  29/03/2000:   - You can now use block_crypt and block_shuffle with
+			      Bcrypt_shuffle. But there is still a problem with 
+				  bcrypt_MEM_shuffle : buffer overflow when using very 
+				  large block_crypt.
+
+  28/03/2000:   - Fixed problem when using block_crypt parameter, this was due
+				  to a bug in bfile and file_shuffle.
+				- Problem when using block_crypt and mem_shuffle.
+
+  27/03/2000:   - Problem when using block_crypt and file_shuffle.
+
+  24/03/2000:	- New bcrypt_shuffle_mem function finished
+			    - the block shuffle parameter now has to be a multiple
+			      of varinit->NB_BYTE this is because it would be 
+				  be too difficult/long to handle any block shuffle length
+			      while using the memory method.
+				  Indeed, if the varinit->NB_BYTE = 4 and the block_shuffle =21
+				  then to get the data from the file_mem we would need to
+				  to use binary shift. Maybe in the next version...
+
+  22/03/2000:   - Changed the bcrypt_shuffle_mem function
+
+  21/03/2000:	- Changed the bcrypt_shuffle_file function to use the new
+				  parameters: block_crypt and block_shuffle
+  
+  20/03/2000:	- MAJOR changes in bcrypt_swap. At last I found the bug 
+				  that was randomly make my cryptography library give the wrong
+				  result while decrypting. I was looking for this bug for over
+				  a month now !!! The problem was in bcrypt_swap, I was not 
+				  initialising the tempa and tempb variables when I was
+				  doing a logical operation. Because I was however doing the
+				  initialisation when I was doing a swap this bug was function 
+				  of the password used to crypt. If the password was such that
+				  first a "swap" was taking place then the variables were
+				  initialised correctly and no bug happened.
+			      Sometimes even if I was starting with a logical operation
+				  there was no problem because the tempa and tempb were equal
+				  to 0. But sometimes there were not. It's why it was such a
+				  a difficult bug to find as it seemed to be random ! and 
+				  never happened at the same time, same place. I first thought
+				  it was a memory allocation problem and I lost a lot of time
+				  tracking this. Well, at last I found the bug !
+				- New bcrypt_mem_seed function
+				- You can now specify a block length to crypt.
+		        - Now there are 5 crypt power available:
+				  0 = seed
+				  1 = probability seed
+				  2 = shuffle
+				  3 = seed + shuffle
+				  4 = probability seed + shuffle
+				- Minor changes in most of the functions. This is the result
+				  of my "BIG BUGS" tracking (see above) 
+
+  15/03/2000:   - MAJOR changes in bcrypt_file_seed
+				- Minor changes in bcrypt_code
+				- Minor changes in test_length function.
+				  I do a logical AND to generate new characters rather
+				  than a XOR
+			     
+
+  14/03/2000:   - Changed the bfile function, added 2 new parameters:
+				  block_crypt and block_shuffle 
+				  You will now be able to specify if you want to crypt a file
+				  in once or crypt it block by block
+				  Needs to add new functions and change the seed and shuffle
+				  function
+
+  03/02/2000:   - Implemented the "disk crypt method". Does not work properly.
+				  Weird error which seems to happen in the file_seed()
+				  when I generate new password ! this cannot be ...
+				  Must be a problem with a malloc or memory problem.
+
+  02/02/2000:   - First attempt to make the "disk crypt method" option works
+				  with the file_shuffle function.
+				- Changes in bfile(), now I open file_code with the w+b flag
+ 
+  31/01/2000:   - Fixed the "2 bytes problem". Now the last 2 blocks are
+				  crypted at the beginning of the "file shuffle". The last
+				  2 blocks used to crypt a file's block are now crypted
+				  as well.
+				- The crypt/uncrypt file function is now working !!
+				  (only in memory mode for now)
+
+  26/01/2000:   - Fixed a problem in file_shuffle and file_unshuffle
+			      (= instead of ==  and length_tab-3 instead of length_tab-1)
+				  The new file shuffle almost work I just have a problem with 2
+			      bytes which are not uncrypted. I think it's because the 
+				  file_mem[] is bigger than the file's length.
+  
+  25/01/2000:   - The first version of the new file crypt algorithm is working!
+				  I just have a problem with the first 4 bytes when I uncrypt.
+				- Fixed a "segmentation fault" problem in bcrypt_file_shuffle()
+
+  24/01/2000:   - The new way I do a malloc for file_mem[] solved the problem
+				  I had on Solaris 2.6 to crypt a file. But it seems there is 
+			 	  a problem when I am using 64 bits variables, I am looking at
+				  it now. 
+ 
+  23/01/2000:   - Started 2 new functions: file_shuffle and file_unshuffle
+
+  22/01/2000: 	- I renamed bcrypt_write_file() to bcrypt_file_seed()
+				  The file_mem array is now initialised in bfile()
+				  This is because I am going to write another crypt file
+				  function which will also need the file_mem[]
+				  I have also changed the way I do a malloc for file_mem[]
+				  as I think it could have caused a problem.
+				- Fixed a bug in the crypt file function 
+
+  20/01/2000:	- The library works well on Linux but it has a weird behaviour
+				  on Solaris. I think I found out what was the problem. It was
+				  the new long_rand() function. I have fixed it and everything
+				  seems to work fine.
+
+  18/01/2000:	- Implemented the memory crypt option in bcrypt_write_file 
+
+  17/01/2000:   - Changed the logs (more useful) 
+	    		- Changed the bcrypt_write_file function. Added a parameter :
+		    	  int memory. This is if you want the file to be crypted in
+		  		  memory rather than directly on the disk (slow).
+		  		  But you still have the choice in case the file you want to
+		  		  crypted is so big that you can't load it all in the memory.
+
+  16/01/2000:	- Removed 2 variables from the varinit var which were not 
+		 		  used anymore: NB_INDEX_DOUBLE and NB_CHAR_DOUBLE
+				- Fixed minor bug in the bcrypt_add function
+				- Added 2 new functions to generate a pseudo random number:
+		  	 	  lfsr() and long_rand(). Lfsr() is a Linear Feeback Shift
+		 		  Register. 
+ 
+  09/01/2000:  	- Removed the library history from the library source
+ 		   		  and put it in a seprate file.
+		 		- Minor changes in the write_file function.
+  				- Minor changes in the comparison function.
+ 				- Changed the Read Key function to do not extract the random
+		 		  number only from the index 0 of the cipher password.
+		 		- Changed the Code function. The circular shift on the random
+ 				  number depends now of the cipher password and not anymore  
+ 		  		  of the clear password.
+ 		  		  the first random number is added to a position which depends 
+  		 		  of the password and not anymore at the index 0. 
+  				- MAJOR CHANGE. Changed the swap function. Here are the changes:
+ 		  		  Start from left or the right of the bits string depends of the
+ 		  		  password	
+ 		  		  .I alternate SWAP and Logical Operation (LO)
+ 		  		  .The first operation (SWAP or LO) depends of the password
+ 		  		  .Each new cycle of operation has a different 
+ 		   		   direction/operation from the previous one.
+ 		  		  .A cycle of operation is a succession of SWAP and LO on 
+  		   		   each bits of the password  
+ 		  		  .There is now a "complexity" parameter, this set the 
+ 		   		   number of series of cycle you want to do (default is 2)
+ 		  		  .With a complexity = 2 each bits will be SWAPPED and had a LO
+ 		 		  .Increasing the complexity may be more secure but it will
+ 		   		   take more time, the choice is yours !
+ 		  		  .Changed the way I handle "0", when a "0" is found I replace
+ 		   		   it by mixing 2 characters from the cipher password.  
+ 		   		   These characters are choosen pseudo-randomly
+ 				- Changed the add function. Much more efficient even
+ 		  		  if it's still a small part of my cryptography algorithm.
+ 		  		  Now I do a "circular shift" every time I add the number.
+  				- Changed the transcription function. I do not replace
+ 		  		  "0" character with the pattern of bit "010101...." anylonger.
+ 		  		  Indeed, this could have been a security hole with a
+ 		  		  cryptanalyse of the cipher text. 
+ 
+  08/01/2000:	- Changed the test_length function, better way to generate new
+ 		  		  characters, now I mix two pseudo-random characters from the  
+ 		 		  original "clear password". I have fixed a bug in my  
+ 				  "insertion" algorithm, in the last for loop "i" was set to 0 
+ 		  		  when it should have been set to "xy". This was removing some
+ 		   		  orginal character from the "clear password".It is also   
+    		      a simpler algorithm.  
+ 				- Added a new verbose  mode: mode = 2, this will give more
+ 		  		  debugging information
+ 				- Minor change to  improve speed 
+ 				- Added 2 "clean functions":  bclean_string and bclean_typeint
+ 		  	 	  this clean the password from the memory 
+  				- After 2  months working on this new algorithm I start 
+    	          programming again... at last ! Everything is on paper !
+ 		   
+ 
+  --- V 2.0.0 ---
+ 
+  31/10/1999: 	- I have just changed the library version which was still set 
+ 		 		  to 1.8.0
+ 
+  26/07/1999 :	- I have tested this library for weeks now, it should be
+ 		  		  stable. Therefore I start a new number version for this
+ 		  		  library: 2.0.0 
+ 
+ 
+  09/07/1999 :	- Fixed minor error in read_password(). Now if there is 
+ 		  		the last user in the password file named toto and 
+ 		  		you try to logon as "t" then the function won't be
+ 		  		confused anymore as I now compare the lenght of the
+ 		  		strings.
+ 
+  --- V 1.8.0 ---
+ 
+  18/02/1998 :	- Made some modification in the swap function.
+ 	          	  Now the bilateral swap is more powerful and faster !
+  	        	- Corrected some minor bugs.	
+ 
+  --- V 1.7.3 ----
+ 
+  16/02/1998 :	- Corrected minor bugs in binit() function
+ 				- Added an option in binit() : mode = 2
+ 
+  15/02/1998 :	- Made some modifications to bfile, added a parameter.
+ 		 		 Now everything seems to work fine on Windows95, even
+ 		  		 even with very large KEY.
+             	- Cleaned the source code.
+ 				- Removed some useless log
+ 				- Corrected minor error in bkey_generator function.
+ 
+  14/02/1998 :	- Made some modifications to several functions to make them
+ 		  		work with Windows95 :
+ 		  		binit(), bkey_generator(), bhide()
+ 
+  13/02/1998 :	- Fixed a problem with Windows95 : you can not send in parameter
+ 		  		a string > 255 characters to a DLL !
+ 
+  --- V 1.7.2 ---
+ 
+  12/02/1998 :	- Added the fflush() function after any fprintf
+ 				- I added a parameter to binit() : int mode
+ 		 		  mode = 0 -> stderr
+ 				  mode = 1 -> file
+ 				- I can now generate some log with Windows95
+ 				- Fixed minor bugs
+ 
+  11/02/1998 :	- Fixed a BIG bug in test_length function :
+ 		  		Sometimes, with bkey_generator function I could have a
+ 		  		very small input text, 0 or 2 characters ...
+ 		  		Because I sometimes had '/0' in the string.
+               Now I have one more parameter the external functions :
+ 		 		int length, which is the length of the clear password sent
+ 		  		in parameter.
+ 		  		Thanks to that, your cipher password can contain '/0'
+ 
+  --- V 1.7.1 ---
+ 
+  07/02/1998 : 	- Cleaned the source code
+               	- Changed the write hide algorithm to make it compatible
+ 	          	      with Windows 95 DLL.
+               	- Added a new global variable : LIB_VERSION
+ 
+  --- V 1.7.0 ---
+ 
+  03/02/1998 : 	- Added bpow function, a power function
+ 
+  29/01/1998 : 	- Small modification for compibility with Borland C++
+ 	          	      Builder on Windows95
+ 
+  28/01/1998 : 	- Added the backup file in write_hide function
+ 
+  27/01/1998 : 	- Fixed some bugs in bkey_generator function
+ 	        		- Added a Check for 0 value in swap and code functions
+ 	 	        	- Added write_key_file and read_key_file functions
+ 		        	- Added write_hide and read_hide functions
+ 	   		     	- Added delete_passwd function
+ 
+  26/01/1998 :	- Added the bkey_generator function, use it to generate long
+ 		  		key. (key = clear text that will be use to do a passwd)
+ 		  		You can initialise the key generation with a random
+ 		  		number or with 8 characters.
+ 
+  --- V 1.6.3 ---
+ 
+  20/01/1998 : - Fixed a bug in the bcrypt write function, when I had to
+ 		  		write at the end of a file some data, which the length was
+ 		  		inferior to varinit->NB_CHAR.
+ 
+  19/01/1998 : - Problem with a variable global : USER_LENGTH, I added it to
+ 		  		varinit, I had some problem with this variable and with
+ 		  		malloc
+ 				- Problem in write_passwd function, variable utilisation (pos)
+ 
+  17/01/1998 : - Minor problem in test passwd function, I used a  type,
+ 		  		and I had a problem with that on Windows95, hum, hum ...
+ 
+ 
+  --- V 1.6.2 ---
+ 
+  16/01/1998 : - Resolved a bug in the probability crypt function
+ 		 		  Problem with an array's border :
+ 		   		  j = 0 when it was suppose to be j = 1
+ 
+  15/01/1998 :	- Minor changes to make my library works on a Silicon Graphics
+ 
+  14/01/1998 :	- Resolved the problem with bpass parameter : passwd
+ 			  	  when I wanted to use my DLL on Windows 95
+ 			 	  (who said windows95 = error ??? ;o)
+ 	 			  Now, I do not have a TYPE_INT  type anymore,
+ 	  	  		  So it is the program that call this library that
+ 		  		  has to reserve memory for the passwd variable (malloc)
+ 		   		  Maybe a bit less easy to use, but more compatible ...
+ 
+  13/01/1998 :	- Added Windows 95 DLL's compatibility
+ 		  		with #if defined(__WIN32__)
+ 				- I also removed my global variables because it was a problem
+ 				when I tried to use my library on Windows95
+ 		  		so I have now a pointer in parameter of each function :
+  	            varinit, and a new type : globalvar
+ 
+  12/01/1998 :	- write_passd and read_passwd functions:
+ 		 		 windows 95 problem's compatibility with typedef => resolved
+ 
+  11/01/1998 : - Bugs corrections in bfile and bcrypt_write_file_prob
+ 		 		  Problem of aray initialisation and variable init :
+ 		 		  pass_key and code_key
+ 				- Removed all extra functions (bcrypt_vol,etc)
+              	- Started to do an HISTORY
+
